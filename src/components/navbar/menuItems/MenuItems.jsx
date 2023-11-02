@@ -1,5 +1,4 @@
 'use client'
-import Image from "next/image";
 import Dropdown from "../dropdown/Dropdown";
 import style from './menu.module.css'
 import { useState } from "react";
