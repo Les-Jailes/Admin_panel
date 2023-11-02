@@ -14,6 +14,12 @@ export default function Home() {
     images: [""], // Inicia con un campo de imagen
   });
 
+  const [description, setDescription] = useState("");
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "code" && parseInt(value) < 1) {
@@ -161,6 +167,24 @@ export default function Home() {
     setFormData({ ...formData, images: [...formData.images, ""] });
   };
 
+  const handleAdd = () => {
+    // Imprimir todos los datos en la consola
+    console.log("Code:", formData.code);
+    console.log("Name:", formData.name);
+    console.log("Description:", description);
+    console.log("Price:", formData.price);
+    console.log("Categoria:", formData.categoria);
+    console.log("Type:", formData.type);
+    console.log("Color:", formData.color);
+    console.log("Size:");
+    formData.size.forEach((sizeObj) => {
+      if (sizeObj && sizeObj.size && sizeObj.quantity) {
+        console.log(`${sizeObj.size}: ${sizeObj.quantity}`);
+      }
+    });
+    console.log("Images:", formData.images);
+  };
+
   return (
     <form>
       <h1>Add Product</h1>
@@ -183,6 +207,16 @@ export default function Home() {
           value={formData.name}
           onChange={handleInputChange}
           required
+        />
+      </label>
+      <br />
+
+      <label>
+        Description:
+        <textarea
+          name="description"
+          value={description}
+          onChange={handleDescriptionChange}
         />
       </label>
       <br />
@@ -273,7 +307,7 @@ export default function Home() {
         {formData.images.map((image, index) => (
           <div key={index}>
             <input
-              type="text"
+              type="url"
               value={image}
               onChange={(e) => handleImageChange(index, e.target.value)}
             />
@@ -287,6 +321,9 @@ export default function Home() {
           Añadir otra imagen
         </button>
       </label>
+      <button type="button" onClick={handleAdd}>
+        Add
+      </button>
     </form>
   );
 }
