@@ -137,11 +137,13 @@ export default function Home() {
   const handleQuantityChange = (e, size) => {
     const { value } = e.target;
     const parsedValue = parseInt(value, 10);
-    
+
     if (!isNaN(parsedValue) && parsedValue > 0) {
       const updatedSize = [...formData.size];
-      const sizeIndex = updatedSize.findIndex((sizeObj) => sizeObj.size === size);
-  
+      const sizeIndex = updatedSize.findIndex(
+        (sizeObj) => sizeObj.size === size
+      );
+
       if (sizeIndex !== -1) {
         updatedSize[sizeIndex] = { size, quantity: parsedValue };
         setFormData({ ...formData, size: updatedSize });
@@ -228,7 +230,7 @@ export default function Home() {
       <label>
         Color:
         <input
-          type="color"
+          type="text"
           name="color"
           value={formData.color}
           onChange={handleInputChange}
@@ -277,7 +279,11 @@ export default function Home() {
             />
           </div>
         ))}
-        <button type="button" onClick={handleAddImage}>
+        <button
+          type="button"
+          onClick={handleAddImage}
+          disabled={formData.images.some((image) => image.trim() === "")}
+        >
           Añadir otra imagen
         </button>
       </label>
