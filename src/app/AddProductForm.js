@@ -1,22 +1,27 @@
 // AddProductForm.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import style from "./page.module.css";
 import InputField from "./InputField";
 import TextAreaField from "./TextAreaField";
 import SelectField from "./SelectField";
 import CheckboxWithQuantity from "./CheckboxWithQuantity";
 import ImageButton from "./ImageButton";
+import axios from 'axios'
+import API from "./api";
 
 export default function AddProductForm() {
+  
+  const [sizes, setSizes] = useState([]);
   const [formData, setFormData] = useState({
     code: "",
     name: "",
     price: "",
-    categoria: "",
+    category: "",
     type: "",
     color: "",
     size: [],
     images: [""],
+    description: "",
   });
 
   const [description, setDescription] = useState("");
@@ -37,7 +42,7 @@ export default function AddProductForm() {
     const categoria = e.target.value;
     setFormData({
       ...formData,
-      categoria,
+      category: categoria,
       type: getDefaultType(categoria),
       size: getDefaultSize(categoria),
     });
@@ -173,24 +178,40 @@ export default function AddProductForm() {
   const handleAddImage = () => {
     setFormData({ ...formData, images: [...formData.images, ""] });
   };
-
-  const handleAdd = () => {
-    console.log("Code:", formData.code);
-    console.log("Name:", formData.name);
-    console.log("Description:", description);
-    console.log("Price:", formData.price);
-    console.log("Categoria:", formData.categoria);
-    console.log("Type:", formData.type);
-    console.log("Color:", formData.color);
-    console.log("Size:");
-    formData.size.forEach((sizeObj) => {
-      if (sizeObj && sizeObj.size && sizeObj.quantity) {
-        console.log(`${sizeObj.size}: ${sizeObj.quantity}`);
-      }
-    });
-    console.log("Images:", formData.images);
+  const submit = async(event) => {
+    event.preventDefault();
+    const producForm = 
+    {
+      code: formData.code,
+      name: formData.name,
+      price: formData.price,
+      category: formData.category,
+      type: formData.type,
+      color: formData.color,
+      size: sizes,
+      images: formData.images,
+      description: formData.description,
+    }
+    try {
+      const response = await API.post("/Product", producForm);
+      console.log(response.status, response.data.token);
+    } catch (error) {
+      console.error("Axios Error:", error);
+    }
   };
-
+  useEffect(() => {
+    const getCheckedSizes = () => {
+      const updatedSizes = [];
+      formData.size.forEach((sizeObj) => {
+        if (sizeObj && sizeObj.size && sizeObj.quantity) {
+          const newSize = sizeObj.size + ' ' + sizeObj.quantity;
+          updatedSizes.push(newSize);
+        }
+      });
+      setSizes(updatedSizes);
+    }
+    getCheckedSizes();
+  }, [formData.size]);
   return (
     <form className={style.form}>
       <h1 className={style.inputContainer}>Add Product</h1>
@@ -229,7 +250,7 @@ export default function AddProductForm() {
       <SelectField
         label="Categoria"
         name="categoria"
-        value={formData.categoria}
+        value={formData.category}
         onChange={handleCategoriaChange}
         options={["Seleccione una categoría", "Women", "Men", "Boy", "Girl"]}
       />
@@ -238,7 +259,7 @@ export default function AddProductForm() {
         name="type"
         value={formData.type}
         onChange={handleInputChange}
-        options={getDefaultTypes(formData.categoria)}
+        options={getDefaultTypes(formData.category)}
         placeholder="a"
       />
       <InputField
@@ -249,8 +270,8 @@ export default function AddProductForm() {
         onChange={handleInputChange}
         placeholder="a"
       />
-      {formData.categoria &&
-        getDefaultSize(formData.categoria).map((size) => (
+      {formData.category &&
+        getDefaultSize(formData.category).map((size) => (
           <CheckboxWithQuantity
             key={size}
             size={size}
@@ -273,7 +294,7 @@ export default function AddProductForm() {
           isDisabled={formData.images.some((image) => image.trim() === "")}
         />
       ))}
-      <button type="button" onClick={handleAdd}>
+      <button type="button" onClick={submit}>
         Add
       </button>
     </form>
