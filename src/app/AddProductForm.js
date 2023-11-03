@@ -33,7 +33,7 @@ export default function AddProductForm() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "code" && parseInt(value) < 1) {
+    if (name === "code" || name === "price" && parseInt(value) < 1) {
       return;
     }
     setFormData({ ...formData, [name]: value });
