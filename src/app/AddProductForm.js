@@ -8,6 +8,7 @@ import ImageButton from "./ImageButton";
 import axios from "axios";
 import API from "./api";
 import { AiOutlinePlus } from "react-icons/ai";
+import DeleteButton from "./DeleteButton";
 import "@/app/AddProductForm.css";
 
 export default function AddProductForm() {
@@ -178,6 +179,24 @@ export default function AddProductForm() {
   const handleAddImage = () => {
     setFormData({ ...formData, images: [...formData.images, ""] });
   };
+
+  const handleDeleteImage = (index) => {
+    setFormData((prevFormData) => {
+      if (index === 0 && prevFormData.images.length >= 1) {
+        return prevFormData;
+      }
+  
+      const updatedImages = prevFormData.images.filter((_, i) => i !== index);
+      const updatedSize = prevFormData.size.filter((obj) => obj.id !== index);
+  
+      return {
+        ...prevFormData,
+        images: updatedImages,
+        size: updatedSize,
+      };
+    });
+  };
+  
   const submit = async (event) => {
     event.preventDefault();
     const producForm = {
@@ -238,7 +257,7 @@ export default function AddProductForm() {
         />
         <InputField
           label="Price"
-          type="text"
+          type="number"
           name="price"
           value={formData.price}
           onChange={handleInputChange}
@@ -283,14 +302,21 @@ export default function AddProductForm() {
           <div className="image-path-container">
             <div className="image-button-container">
               {formData.images.map((image, index) => (
-                <ImageButton
-                  key={index}
-                  index={index}
-                  value={image}
-                  onChange={handleImageChange}
-                />
+                <div key={index} className="image-button-wrapper">
+                  <ImageButton
+                    index={index}
+                    value={image}
+                    onChange={handleImageChange}
+                  />
+                </div>
               ))}
             </div>
+            {formData.images.length > 0 && (
+              <DeleteButton
+                index={formData.images.length - 1}
+                onClick={handleDeleteImage}
+              />
+            )}
             <button
               className="plusButton"
               type="button"
