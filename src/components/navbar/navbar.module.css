@@ -5,7 +5,12 @@
     padding:0 0.5rem;
     gap: 3rem;
     margin: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    background-color: #fff;
 }
+
 .menuItems {
     display: flex;
     align-items: center;
@@ -15,30 +20,6 @@
     gap: 1rem;
 }
 
-.searchContainer{
-    border: 1px solid black;
-    border-radius: 60px;
-}
-
-.searchBar{
-    width: 900px;
-    display: flex;
-    padding: 5px 10px;
-    justify-content: space-between;
-    background: transparent;
-    border: 0;
-    outline: none;
-    font-size: 18px;
-    color: black;
-}
-.searchButton{
-    border: 0;
-    border-radius: 50%;
-    width: 43px;
-    height: 40px;
-    background-color: #254B5E;
-    cursor: pointer;
-}
 .logoImg{
     object-fit: contain;
     margin: 0.5rem 0 0 0;

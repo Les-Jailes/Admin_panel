@@ -6,6 +6,8 @@ import TextAreaField from "./TextAreaField";
 import SelectField from "./SelectField";
 import CheckboxWithQuantity from "./CheckboxWithQuantity";
 import ImageButton from "./ImageButton";
+import { AiOutlinePlus } from "react-icons/ai";
+import '@/app/AddProductForm.css'
 
 export default function AddProductForm() {
   const [formData, setFormData] = useState({
@@ -192,15 +194,15 @@ export default function AddProductForm() {
   };
 
   return (
+    <div className="pageContainer">
     <form className={style.form}>
-      <h1 className={style.inputContainer}>Add Product</h1>
+      <h1>Add Product</h1>
       <InputField
         label="Code"
         type="number"
         name="code"
         value={formData.code}
         onChange={handleInputChange}
-        placeholder="a"
       />
       <InputField
         label="Name"
@@ -208,7 +210,6 @@ export default function AddProductForm() {
         name="name"
         value={formData.name}
         onChange={handleInputChange}
-        placeholder="a"
         required
       />
       <TextAreaField
@@ -216,7 +217,6 @@ export default function AddProductForm() {
         name="description"
         value={description}
         onChange={handleDescriptionChange}
-        placeholder="a"
       />
       <InputField
         label="Price"
@@ -224,14 +224,13 @@ export default function AddProductForm() {
         name="price"
         value={formData.price}
         onChange={handleInputChange}
-        placeholder="a"
       />
       <SelectField
         label="Categoria"
         name="categoria"
         value={formData.categoria}
         onChange={handleCategoriaChange}
-        options={["Seleccione una categoría", "Women", "Men", "Boy", "Girl"]}
+        options={["Select a category", "Women", "Men", "Boy", "Girl"]}
       />
       <SelectField
         label="Type"
@@ -239,15 +238,13 @@ export default function AddProductForm() {
         value={formData.type}
         onChange={handleInputChange}
         options={getDefaultTypes(formData.categoria)}
-        placeholder="a"
       />
       <InputField
         label="Color"
-        type="text"
+        type="color"
         name="color"
         value={formData.color}
         onChange={handleInputChange}
-        placeholder="a"
       />
       {formData.categoria &&
         getDefaultSize(formData.categoria).map((size) => (
@@ -263,19 +260,29 @@ export default function AddProductForm() {
             onQuantityChange={(e) => handleQuantityChange(e, size)}
           />
         ))}
-      {formData.images.map((image, index) => (
-        <ImageButton
-          key={index}
-          index={index}
-          value={image}
-          onChange={handleImageChange}
-          onAddImage={handleAddImage}
-          isDisabled={formData.images.some((image) => image.trim() === "")}
-        />
-      ))}
-      <button type="button" onClick={handleAdd}>
+      <div className="inputImage">
+      <label className={style.label}>Image(s)</label>
+      <div className="image-path-container">
+      
+        <div className="image-button-container">
+          {formData.images.map((image, index) => (
+            <ImageButton
+              key={index}
+              index={index}
+              value={image}
+              onChange={handleImageChange}
+            />
+          ))}
+        </div>
+        <button className="plusButton" type="button" onClick={handleAddImage}>
+          <AiOutlinePlus size={18}/>
+        </button>
+      </div>
+      </div>
+      <button className={`${style.button} button`} type="button" onClick={handleAdd}>
         Add
       </button>
     </form>
+    </div>
   );
 }

@@ -2,9 +2,9 @@
 import React from "react";
 import style from "./page.module.css";
 
-export default function ImageButton({ index, value, onChange, onAddImage, isDisabled }) {
+export default function ImageButton({ index, value, onChange }) {
   return (
-    <div key={index}>
+    <div className="imageButtonInput" key={index}>
       <input
         type="url"
         value={value}
@@ -13,9 +13,6 @@ export default function ImageButton({ index, value, onChange, onAddImage, isDisa
         placeholder="a"
       />
       <br />
-      <button type="button" onClick={onAddImage} disabled={isDisabled}>
-        Añadir otra imagen
-      </button>
     </div>
   );
 }
