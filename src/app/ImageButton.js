@@ -1,8 +1,7 @@
-// ImageButton.js
 import React from "react";
 import style from "./page.module.css";
 
-export default function ImageButton({ index, value, onChange }) {
+export default function ImageButton({ index, value, onChange, }) {
   return (
     <div className="imageButtonInput" key={index}>
       <input

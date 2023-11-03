@@ -2,17 +2,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 .form {
   background-color: white;
   width: 1000px;
   padding: 20px 40px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   box-sizing: border-box;
   box-shadow: 0 15px 25px rgba(0,0,0,.6);
   border-radius: 10px;
@@ -36,6 +33,9 @@
   display: grid;
   grid-template-columns: 20% 80%;
   gap: 10px;
+  height: 100%;
+  padding: 0 10px;
+  font-size: 18px;
 }
 
 .inputContainer{
@@ -51,21 +51,8 @@
 }
 
 .checkbox{
-  display: inline-block;
-  background: red;
-  border: 1px solid #DADCE0;
-  color: aqua;
-  border-radius: 25px;
-  transition: .2s all ease;
-  padding: 8px 12 px;
   width: 20px;
   height: 20px;
-}
-
-.checkbox input[type="checkbox"]:checked + label {
-  border: 1px solid #red;
-  background: #red;
-  color: #fff;
 }
 
 .quantityNumber{
@@ -90,8 +77,13 @@
 
 .descriptionInput{
   resize: vertical;
-  max-height: 200px;
-  min-height: 40px;
+  max-height: 250px;
+  min-height: 200px;
+  padding: '10px';
+  border: '1px solid #DADCE0';
+  /*borderRadius: '7px';*/
+  /*fontSize: '18px';*/
+  outline: 'none';
 }
 
 .input::placeholder {
@@ -165,7 +157,7 @@
 }
 
 /* Tablet and Smaller Desktop */
-@media (min-width: 701px) and (max-width: 1120px) {
+@media (max-width: 1120px) {
   .grid {
     grid-template-columns: repeat(2, 50%);
   }
@@ -210,14 +202,14 @@
   }
 }
 
-@media (min-width: 600px) and (max-width: 800px) {
+@media (max-width: 800px) {
   .form {
     width: 80%;
     max-width: 600px;
   }
 }
 
-@media (min-width: 601px) and (max-width: 1120px) {
+@media (max-width: 1120px) {
   .form {
     max-width: 800px;
   }

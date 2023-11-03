@@ -1,8 +1,7 @@
-// SelectField.js
 import React from "react";
 import style from "./page.module.css";
 
-export default function SelectField({ label, name, value, onChange, options }) {
+export default function SelectField({ label, name, value, onChange, options, }) {
   return (
     <div className={style.inputContainer}>
       <label className={style.label}>{label}</label>

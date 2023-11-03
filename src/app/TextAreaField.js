@@ -1,13 +1,7 @@
 import React from "react";
 import style from "./page.module.css";
 
-export default function TextAreaField({
-  label,
-  name,
-  value,
-  onChange,
-  placeholder,
-}) {
+export default function TextAreaField({ label, name, value, onChange, placeholder, }) {
   return (
     <div className={style.descriptionContainer}>
       <label className={style.label}>{label}</label>
