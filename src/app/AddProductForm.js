@@ -247,7 +247,6 @@ export default function AddProductForm() {
           name="name"
           value={formData.name}
           onChange={handleInputChange}
-          required
         />
         <TextAreaField
           label="Description"
