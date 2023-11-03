@@ -1,28 +1,27 @@
-// CheckboxWithQuantity.js
 import React from "react";
 import style from "./page.module.css";
 
-export default function CheckboxWithQuantity({ size, checked, onChange, quantity, onQuantityChange }) {
+export default function CheckboxWithQuantity({ size, checked, onChange, quantity, onQuantityChange, }) {
   return (
-    <div className={style.inputContainer}>
+    <div className={style.inputContainerQuantity}>
       <label className={style.label}>
-        <input
+        {size}
+      </label>
+      <input
           type="checkbox"
           name="size"
           value={size}
           onChange={onChange}
-          className={style.input}
+          className={style.checkbox}
           checked={checked}
         />
-        {size}
-      </label>
-      {checked && (
+        {checked && (
         <input
           type="number"
           name={`quantity_${size}`}
           value={quantity}
           onChange={(e) => onQuantityChange(e, size)}
-          className={style.input}
+          className={style.quantityNumber}
           placeholder="a"
         />
       )}

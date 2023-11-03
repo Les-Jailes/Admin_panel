@@ -1,4 +1,3 @@
-// AddProductForm.js
 import React, { useState, useEffect } from "react";
 import style from "./page.module.css";
 import InputField from "./InputField";
@@ -6,11 +5,13 @@ import TextAreaField from "./TextAreaField";
 import SelectField from "./SelectField";
 import CheckboxWithQuantity from "./CheckboxWithQuantity";
 import ImageButton from "./ImageButton";
-import axios from 'axios'
+import axios from "axios";
 import API from "./api";
+import { AiOutlinePlus } from "react-icons/ai";
+import DeleteButton from "./DeleteButton";
+import "@/app/AddProductForm.css";
 
 export default function AddProductForm() {
-  
   const [sizes, setSizes] = useState([]);
   const [formData, setFormData] = useState({
     code: "",
@@ -32,7 +33,7 @@ export default function AddProductForm() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "code" && parseInt(value) < 1) {
+    if (name === "code" || name === "price" && parseInt(value) < 1) {
       return;
     }
     setFormData({ ...formData, [name]: value });
@@ -178,10 +179,27 @@ export default function AddProductForm() {
   const handleAddImage = () => {
     setFormData({ ...formData, images: [...formData.images, ""] });
   };
-  const submit = async(event) => {
+
+  const handleDeleteImage = (index) => {
+    setFormData((prevFormData) => {
+      if (index === 0 && prevFormData.images.length >= 1) {
+        return prevFormData;
+      }
+  
+      const updatedImages = prevFormData.images.filter((_, i) => i !== index);
+      const updatedSize = prevFormData.size.filter((obj) => obj.id !== index);
+  
+      return {
+        ...prevFormData,
+        images: updatedImages,
+        size: updatedSize,
+      };
+    });
+  };
+  
+  const submit = async (event) => {
     event.preventDefault();
-    const producForm = 
-    {
+    const producForm = {
       code: formData.code,
       name: formData.name,
       price: formData.price,
@@ -191,9 +209,9 @@ export default function AddProductForm() {
       size: sizes,
       images: formData.images,
       description: formData.description,
-    }
+    };
     try {
-      const response = await API.post("/Product", producForm);
+      const response = await API.post("/product", producForm);
       console.log(response.status, response.data.token);
     } catch (error) {
       console.error("Axios Error:", error);
@@ -204,99 +222,117 @@ export default function AddProductForm() {
       const updatedSizes = [];
       formData.size.forEach((sizeObj) => {
         if (sizeObj && sizeObj.size && sizeObj.quantity) {
-          const newSize = sizeObj.size + ' ' + sizeObj.quantity;
+          const newSize = sizeObj.size + " " + sizeObj.quantity;
           updatedSizes.push(newSize);
         }
       });
       setSizes(updatedSizes);
-    }
+    };
     getCheckedSizes();
   }, [formData.size]);
   return (
-    <form className={style.form}>
-      <h1 className={style.inputContainer}>Add Product</h1>
-      <InputField
-        label="Code"
-        type="number"
-        name="code"
-        value={formData.code}
-        onChange={handleInputChange}
-        placeholder="a"
-      />
-      <InputField
-        label="Name"
-        type="text"
-        name="name"
-        value={formData.name}
-        onChange={handleInputChange}
-        placeholder="a"
-        required
-      />
-      <TextAreaField
-        label="Description"
-        name="description"
-        value={description}
-        onChange={handleDescriptionChange}
-        placeholder="a"
-      />
-      <InputField
-        label="Price"
-        type="text"
-        name="price"
-        value={formData.price}
-        onChange={handleInputChange}
-        placeholder="a"
-      />
-      <SelectField
-        label="Categoria"
-        name="categoria"
-        value={formData.category}
-        onChange={handleCategoriaChange}
-        options={["Seleccione una categoría", "Women", "Men", "Boy", "Girl"]}
-      />
-      <SelectField
-        label="Type"
-        name="type"
-        value={formData.type}
-        onChange={handleInputChange}
-        options={getDefaultTypes(formData.category)}
-        placeholder="a"
-      />
-      <InputField
-        label="Color"
-        type="text"
-        name="color"
-        value={formData.color}
-        onChange={handleInputChange}
-        placeholder="a"
-      />
-      {formData.category &&
-        getDefaultSize(formData.category).map((size) => (
-          <CheckboxWithQuantity
-            key={size}
-            size={size}
-            checked={formData.size.some((sizeObj) => sizeObj.size === size)}
-            onChange={handleSizeChange}
-            quantity={
-              formData.size.find((sizeObj) => sizeObj.size === size)
-                ?.quantity || ""
-            }
-            onQuantityChange={(e) => handleQuantityChange(e, size)}
-          />
-        ))}
-      {formData.images.map((image, index) => (
-        <ImageButton
-          key={index}
-          index={index}
-          value={image}
-          onChange={handleImageChange}
-          onAddImage={handleAddImage}
-          isDisabled={formData.images.some((image) => image.trim() === "")}
+    <div className="pageContainer">
+      <form className={style.form}>
+        <h1>Add Product</h1>
+        <InputField
+          label="Code"
+          type="number"
+          name="code"
+          value={formData.code}
+          onChange={handleInputChange}
         />
-      ))}
-      <button type="button" onClick={submit}>
-        Add
-      </button>
-    </form>
+        <InputField
+          label="Name"
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+        />
+        <TextAreaField
+          label="Description"
+          name="description"
+          value={description}
+          onChange={handleDescriptionChange}
+        />
+        <InputField
+          label="Price"
+          type="number"
+          name="price"
+          value={formData.price}
+          onChange={handleInputChange}
+        />
+        <SelectField
+          label="Categoria"
+          name="categoria"
+          value={formData.category}
+          onChange={handleCategoriaChange}
+          options={["Select a category", "Women", "Men", "Boy", "Girl"]}
+        />
+        <SelectField
+          label="Type"
+          name="type"
+          value={formData.type}
+          onChange={handleInputChange}
+          options={getDefaultTypes(formData.category)}
+        />
+        <InputField
+          label="Color"
+          type="color"
+          name="color"
+          value={formData.color}
+          onChange={handleInputChange}
+        />
+        {formData.category &&
+          getDefaultSize(formData.category).map((size) => (
+            <CheckboxWithQuantity
+              key={size}
+              size={size}
+              checked={formData.size.some((sizeObj) => sizeObj.size === size)}
+              onChange={handleSizeChange}
+              quantity={
+                formData.size.find((sizeObj) => sizeObj.size === size)
+                  ?.quantity || ""
+              }
+              onQuantityChange={(e) => handleQuantityChange(e, size)}
+            />
+          ))}
+        <div className="inputImage">
+          <label className={style.label}>Image(s)</label>
+          <div className="image-path-container">
+            <div className="image-button-container">
+              {formData.images.map((image, index) => (
+                <div key={index} className="image-button-wrapper">
+                  <ImageButton
+                    index={index}
+                    value={image}
+                    onChange={handleImageChange}
+                  />
+                </div>
+              ))}
+            </div>
+            {formData.images.length > 0 && (
+              <DeleteButton
+                index={formData.images.length - 1}
+                onClick={handleDeleteImage}
+              />
+            )}
+            <button
+              className="plusButton"
+              type="button"
+              onClick={handleAddImage}
+            >
+              <AiOutlinePlus size={18} />
+            </button>
+          </div>
+        </div>
+        <button
+          className={`${style.button} button`}
+          type="button"
+          onClick={submit}
+        >
+          Add
+        </button>
+      </form>
+    </div>
   );
 }
