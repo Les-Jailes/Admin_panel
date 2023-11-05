@@ -1,5 +1,6 @@
 import React from "react";
-import style from "./page.module.css";
+//import style from "./page.module.css";
+import style from "@/css/AddProducts/page.module.css"
 
 export default function TextAreaField({ label, name, value, onChange, placeholder, }) {
   return (

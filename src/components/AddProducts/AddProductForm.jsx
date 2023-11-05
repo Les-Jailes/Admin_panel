@@ -6,10 +6,10 @@ import SelectField from "./SelectField";
 import CheckboxWithQuantity from "./CheckboxWithQuantity";
 import ImageButton from "./ImageButton";
 import axios from "axios";
-import API from "./api";
+import API from "../Api/api";
 import { AiOutlinePlus } from "react-icons/ai";
 import DeleteButton from "./DeleteButton";
-import "@/app/AddProductForm.css";
+import "@/css/AddProducts/AddProductForm.css"
 
 export default function AddProductForm() {
   const [sizes, setSizes] = useState([]);
@@ -33,7 +33,10 @@ export default function AddProductForm() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "code" || name === "price" && parseInt(value) < 1) {
+    if (name === "code" && parseInt(value) < 1) {
+      return;
+    }
+    if (name === "price" && parseInt(value) < 1) {
       return;
     }
     setFormData({ ...formData, [name]: value });
@@ -44,24 +47,9 @@ export default function AddProductForm() {
     setFormData({
       ...formData,
       category: categoria,
-      type: getDefaultType(categoria),
+      type: "",
       size: getDefaultSize(categoria),
     });
-  };
-
-  const getDefaultType = (categoria) => {
-    switch (categoria) {
-      case "Women":
-        return "Shirts";
-      case "Men":
-        return "Shirts";
-      case "Boy":
-        return "Shirts";
-      case "Girl":
-        return "T-shirts";
-      default:
-        return "";
-    }
   };
 
   const getDefaultSize = (categoria) => {
@@ -80,6 +68,18 @@ export default function AddProductForm() {
   const getDefaultTypes = (categoria) => {
     switch (categoria) {
       case "Women":
+        return [
+          "Shirts",
+          "T-shirts",
+          "Sweaters",
+          "Coats",
+          "Suits",
+          "Underwear",
+          "Socks",
+          "Skirts",
+          "Pants",
+          "Swimwear",
+        ];
       case "Men":
       case "Boy":
         return [
@@ -106,7 +106,7 @@ export default function AddProductForm() {
           "Swimwear",
         ];
       default:
-        return [];
+        return ["Select a category first"];
     }
   };
 
@@ -131,8 +131,7 @@ export default function AddProductForm() {
           size: [...formData.size, { size: value, quantity: 1 }],
         });
       }
-    } else {
-      if (sizeIndex !== -1) {
+    } else if (sizeIndex !== -1) {
         const updatedSize = [...formData.size];
         if (updatedSize[sizeIndex].quantity > 1) {
           updatedSize[sizeIndex] = {
@@ -146,7 +145,6 @@ export default function AddProductForm() {
             size: formData.size.filter((sizeObj) => sizeObj.size !== value),
           });
         }
-      }
     }
   };
 

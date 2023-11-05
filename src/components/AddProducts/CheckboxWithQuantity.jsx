@@ -1,5 +1,6 @@
 import React from "react";
 import style from "./page.module.css";
+import "@/css/AddProducts/page.module.css"
 
 export default function CheckboxWithQuantity({ size, checked, onChange, quantity, onQuantityChange, }) {
   return (

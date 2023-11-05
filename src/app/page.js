@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import AddProductForm from "./AddProductForm";
+import AddProductForm from "@/components/AddProducts/AddProductForm";
 import style from "./page.module.css";
 
 export default function Home() {
