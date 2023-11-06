@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from "react";
-import style from "./page.module.css";
-import InputField from "./InputField";
-import TextAreaField from "./TextAreaField";
-import SelectField from "./SelectField";
-import CheckboxWithQuantity from "./CheckboxWithQuantity";
-import ImageButton from "./ImageButton";
-import axios from "axios";
-import API from "../Api/api";
+import React, { useState } from "react";
+import API from "@/components/Api/api";
+import style from "@/css/AddProducts/page.module.css";
+import InputField from "./ProductComponents/InputField";
+import TextAreaField from "./ProductComponents/TextAreaField";
+import SelectField from "./ProductComponents/SelectField";
+import CheckboxWithQuantity from "./ProductComponents/CheckboxWithQuantity";
+import ImageButton from "./ProductComponents/ImageButton";
+import DeleteButton from "./ProductComponents/DeleteButton";
 import { AiOutlinePlus } from "react-icons/ai";
-import DeleteButton from "./DeleteButton";
 import "@/css/AddProducts/AddProductForm.css"
+
+import { handleDescriptionChange, handleInputChange, handleCategoriaChange,
+  handleSizeChange, handleQuantityChange, handleImageChange,
+  handleAddImage, handleDeleteImage,
+} from "@/components/AddProducts/FormDataOperations/FormHandlers";
+
+import getDefaultSize from "@/utils/Form/sizeClothes";
+import getDefaultTypes from "@/utils/Form/typesClothes";
+import getDefaultType from "@/utils/Form/typeClothes";
+import useHandleEffect from "./FormDataOperations/useEffect";
 
 export default function AddProductForm() {
   const [sizes, setSizes] = useState([]);
@@ -19,7 +28,7 @@ export default function AddProductForm() {
     price: "",
     category: "",
     type: "",
-    color: "",
+    color: "#ffffff",
     size: [],
     images: [""],
     description: "",
@@ -27,174 +36,6 @@ export default function AddProductForm() {
 
   const [description, setDescription] = useState("");
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "code" && parseInt(value) < 1) {
-      return;
-    }
-    if (name === "price" && parseInt(value) < 1) {
-      return;
-    }
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleCategoriaChange = (e) => {
-    const categoria = e.target.value;
-    setFormData({
-      ...formData,
-      category: categoria,
-      type: "",
-      size: getDefaultSize(categoria),
-    });
-  };
-
-  const getDefaultSize = (categoria) => {
-    switch (categoria) {
-      case "Women":
-      case "Men":
-        return ["XS", "S", "M", "L", "XL", "XXL"];
-      case "Boy":
-      case "Girl":
-        return ["2", "4", "6", "8", "10", "12"];
-      default:
-        return [];
-    }
-  };
-
-  const getDefaultTypes = (categoria) => {
-    switch (categoria) {
-      case "Women":
-        return [
-          "Shirts",
-          "T-shirts",
-          "Sweaters",
-          "Coats",
-          "Suits",
-          "Underwear",
-          "Socks",
-          "Skirts",
-          "Pants",
-          "Swimwear",
-        ];
-      case "Men":
-      case "Boy":
-        return [
-          "Shirts",
-          "T-shirts",
-          "Sweaters",
-          "Coats",
-          "Suits",
-          "Underwear",
-          "Socks",
-          "Pants",
-          "Swimwear",
-        ];
-      case "Girl":
-        return [
-          "T-shirts",
-          "Sweaters",
-          "Coats",
-          "Suits",
-          "Underwear",
-          "Socks",
-          "Skirts",
-          "Pants",
-          "Swimwear",
-        ];
-      default:
-        return ["Select a category first"];
-    }
-  };
-
-  const handleSizeChange = (e) => {
-    const { name, value, checked } = e.target;
-
-    const sizeIndex = formData.size.findIndex(
-      (sizeObj) => sizeObj.size === value
-    );
-
-    if (checked) {
-      if (sizeIndex !== -1) {
-        const updatedSize = [...formData.size];
-        updatedSize[sizeIndex] = {
-          size: value,
-          quantity: updatedSize[sizeIndex].quantity + 1,
-        };
-        setFormData({ ...formData, size: updatedSize });
-      } else {
-        setFormData({
-          ...formData,
-          size: [...formData.size, { size: value, quantity: 1 }],
-        });
-      }
-    } else if (sizeIndex !== -1) {
-        const updatedSize = [...formData.size];
-        if (updatedSize[sizeIndex].quantity > 1) {
-          updatedSize[sizeIndex] = {
-            size: value,
-            quantity: updatedSize[sizeIndex].quantity - 1,
-          };
-          setFormData({ ...formData, size: updatedSize });
-        } else {
-          setFormData({
-            ...formData,
-            size: formData.size.filter((sizeObj) => sizeObj.size !== value),
-          });
-        }
-    }
-  };
-
-  const handleQuantityChange = (e, size) => {
-    const { value } = e.target;
-    const parsedValue = parseInt(value, 10);
-
-    if (value === "" || (!isNaN(parsedValue) && parsedValue >= 1)) {
-      const updatedSize = [...formData.size];
-      const sizeIndex = updatedSize.findIndex(
-        (sizeObj) => sizeObj.size === size
-      );
-
-      if (sizeIndex !== -1) {
-        updatedSize[sizeIndex] = {
-          size,
-          quantity: value === "" ? "" : parsedValue,
-        };
-        setFormData({ ...formData, size: updatedSize });
-      }
-    }
-  };
-
-  const handleImageChange = (index, value) => {
-    const updatedImages = [...formData.images];
-    updatedImages[index] = value;
-    setFormData({ ...formData, images: updatedImages });
-  };
-
-  const handleAddImage = () => {
-    setFormData({ ...formData, images: [...formData.images, ""] });
-  };
-
-  const handleDeleteImage = (index) => {
-    setFormData((prevFormData) => {
-      if (index === 0 && prevFormData.images.length >= 1) {
-        return prevFormData;
-      }
-  
-      const updatedImages = prevFormData.images.filter((_, i) => i !== index);
-      const updatedSize = prevFormData.size.filter((obj) => obj.id !== index);
-  
-      return {
-        ...prevFormData,
-        images: updatedImages,
-        size: updatedSize,
-      };
-    });
-  };
-  
   const submit = async (event) => {
     event.preventDefault();
     const producForm = {
@@ -215,19 +56,9 @@ export default function AddProductForm() {
       console.error("Axios Error:", error);
     }
   };
-  useEffect(() => {
-    const getCheckedSizes = () => {
-      const updatedSizes = [];
-      formData.size.forEach((sizeObj) => {
-        if (sizeObj && sizeObj.size && sizeObj.quantity) {
-          const newSize = sizeObj.size + " " + sizeObj.quantity;
-          updatedSizes.push(newSize);
-        }
-      });
-      setSizes(updatedSizes);
-    };
-    getCheckedSizes();
-  }, [formData.size]);
+  
+  useHandleEffect(formData, setSizes);
+
   return (
     <div className="pageContainer">
       <form className={style.form}>
@@ -237,40 +68,40 @@ export default function AddProductForm() {
           type="number"
           name="code"
           value={formData.code}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e, formData, setFormData)}
         />
         <InputField
           label="Name"
           type="text"
           name="name"
           value={formData.name}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e, formData, setFormData)}
         />
         <TextAreaField
           label="Description"
           name="description"
           value={description}
-          onChange={handleDescriptionChange}
+          onChange={(e) => handleDescriptionChange(e, setDescription)}
         />
         <InputField
           label="Price"
           type="number"
           name="price"
           value={formData.price}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e, formData, setFormData)}
         />
         <SelectField
           label="Categoria"
           name="categoria"
           value={formData.category}
-          onChange={handleCategoriaChange}
+          onChange={(e) => handleCategoriaChange(e, formData, setFormData, getDefaultType, getDefaultSize)}
           options={["Select a category", "Women", "Men", "Boy", "Girl"]}
         />
         <SelectField
           label="Type"
           name="type"
           value={formData.type}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e, formData, setFormData)}
           options={getDefaultTypes(formData.category)}
         />
         <InputField
@@ -278,7 +109,7 @@ export default function AddProductForm() {
           type="color"
           name="color"
           value={formData.color}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e, formData, setFormData)}
         />
         {formData.category &&
           getDefaultSize(formData.category).map((size) => (
@@ -286,12 +117,12 @@ export default function AddProductForm() {
               key={size}
               size={size}
               checked={formData.size.some((sizeObj) => sizeObj.size === size)}
-              onChange={handleSizeChange}
+              onChange={(e) => handleSizeChange(e, formData, setFormData)}
               quantity={
                 formData.size.find((sizeObj) => sizeObj.size === size)
                   ?.quantity || ""
               }
-              onQuantityChange={(e) => handleQuantityChange(e, size)}
+              onQuantityChange={(e) => handleQuantityChange(e, size, formData, setFormData)}
             />
           ))}
         <div className="inputImage">
@@ -303,7 +134,7 @@ export default function AddProductForm() {
                   <ImageButton
                     index={index}
                     value={image}
-                    onChange={handleImageChange}
+                    onChange={(index, value) => handleImageChange(index, value, formData, setFormData)}
                   />
                 </div>
               ))}
@@ -311,13 +142,13 @@ export default function AddProductForm() {
             {formData.images.length > 0 && (
               <DeleteButton
                 index={formData.images.length - 1}
-                onClick={handleDeleteImage}
+                onClick={(index) => handleDeleteImage(index, formData, setFormData)}
               />
             )}
             <button
               className="plusButton"
               type="button"
-              onClick={handleAddImage}
+              onClick={() => handleAddImage(formData, setFormData)}
             >
               <AiOutlinePlus size={18} />
             </button>

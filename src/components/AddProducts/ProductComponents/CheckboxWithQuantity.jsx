@@ -1,6 +1,6 @@
 import React from "react";
-import style from "./page.module.css";
-import "@/css/AddProducts/page.module.css"
+import style from "@/css/AddProducts/page.module.css";
+//import "@/css/AddProducts/page.module.css"
 
 export default function CheckboxWithQuantity({ size, checked, onChange, quantity, onQuantityChange, }) {
   return (
@@ -23,7 +23,6 @@ export default function CheckboxWithQuantity({ size, checked, onChange, quantity
           value={quantity}
           onChange={(e) => onQuantityChange(e, size)}
           className={style.quantityNumber}
-          placeholder="a"
         />
       )}
       <br />

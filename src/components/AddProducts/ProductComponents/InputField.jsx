@@ -1,6 +1,9 @@
 import React from "react";
-import style from "./page.module.css";
-import '@/app/colorInput.css'
+import style from "@/css/AddProducts/page.module.css"
+import '@/css/AddProducts/colorInput.css'
+
+//import style from "./page.module.css";
+//import '@/app/colorInput.css'
 
 export default function InputField({ label, type, name, value, onChange, placeholder,}) {
   return (

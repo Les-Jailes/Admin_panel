@@ -1,5 +1,5 @@
 import React from "react";
-import style from "./page.module.css";
+import style from "@/css/AddProducts/page.module.css";
 
 export default function ImageButton({ index, value, onChange, }) {
   return (
