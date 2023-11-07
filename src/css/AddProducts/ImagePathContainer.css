@@ -1,0 +1,65 @@
+.image-path-container {
+  width: 100%;
+  position: relative;
+  max-width: 400px;
+}
+
+.image-path-container__plusButton {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
+  border: 1px solid #000;
+  background: #254b5e;
+  cursor: pointer;
+  border-color: #254b5e;
+  color: #ffffff;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.image-path-container__plusButton:hover {
+  background-color: #a7d0d2;
+  border-color: #a7d0d2;
+  color: #000000;
+}
+
+.image-button-input {
+  width: 85%;
+}
+
+.image-path-container__deleteButton {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  bottom: 0;
+  left: 420px;
+  border-radius: 50%;
+  border: 1px solid #000;
+  background: #254b5e;
+  cursor: pointer;
+  border-color: #254b5e;
+  color: #ffffff;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.image-path-container__deleteButton:hover {
+  background-color: #a7d0d2;
+  border-color: #a7d0d2;
+  color: #000000;
+}
+
+@media (max-width: 800px) {
+  .image-path-container {
+    max-width: 230px;
+  }
+
+  .image-path-container__plusButton {
+    left: 210px;
+  }
+  
+  .image-path-container__deleteButton {
+    left: 259px;
+  }
+}

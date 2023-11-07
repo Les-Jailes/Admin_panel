@@ -1,10 +1,10 @@
 "use client";
 import AddProductForm from "@/components/AddProducts/AddProductForm";
-import style from "@/css/AddProducts/page.module.css";
+import "@/css/AddProducts/AddProductForm.css";
 
 export default function Home() {
   return (
-    <div className={style.signupFrm}>
+    <div className="addProductForm">
       <AddProductForm />
     </div>
   );

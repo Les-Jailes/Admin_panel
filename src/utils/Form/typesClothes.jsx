@@ -1,4 +1,3 @@
-// getDefaultTypes
 const getDefaultTypes = (categoria) => {
     switch (categoria) {
       case "Women":

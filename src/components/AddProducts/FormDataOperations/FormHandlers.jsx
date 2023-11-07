@@ -6,23 +6,24 @@ export const handleDescriptionChange = (e, setDescription) => {
 
 export const handleInputChange = (e, formData, setFormData) => {
   const { name, value } = e.target;
+
   if ((name === "code" || name === "price") && parseInt(value) < 1) {
     return;
   }
-  if (name === "color" && value === "") {
-    setFormData({ ...formData, [name]: "#ffffff" });
-  } else {
-    setFormData({ ...formData, [name]: value });
-  }
+
+  const updatedData =
+    name === "color" && value === "" ? 
+    { ...formData, [name]: "#ffffff" } : { ...formData, [name]: value };
+
+  setFormData(updatedData);
 };
 
-export const handleCategoriaChange = ( e, formData, setFormData,
-  getDefaultType, getDefaultSize ) => {
+export const handleCategoriaChange = ( e, formData, setFormData, getDefaultSize ) => {
   const categoria = e.target.value;
   setFormData({
     ...formData,
     category: categoria,
-    type: getDefaultType(categoria),
+    type: "",
     size: getDefaultSize(categoria),
   });
 };
@@ -30,46 +31,31 @@ export const handleCategoriaChange = ( e, formData, setFormData,
 export const handleSizeChange = (e, formData, setFormData) => {
   const { value, checked } = e.target;
 
-  const sizeIndex = formData.size.findIndex(
-    (sizeObj) => sizeObj.size === value
-  );
+  const updatedSize = [...formData.size];
+  const sizeIndex = updatedSize.findIndex((sizeObj) => sizeObj.size === value);
 
   if (checked) {
     if (sizeIndex !== -1) {
-      const updatedSize = [...formData.size];
-      updatedSize[sizeIndex] = {
-        size: value,
-        quantity: updatedSize[sizeIndex].quantity + 1,
-      };
-      setFormData({ ...formData, size: updatedSize });
+      updatedSize[sizeIndex].quantity += 1;
     } else {
-      setFormData({
-        ...formData,
-        size: [...formData.size, { size: value, quantity: 1 }],
-      });
+      updatedSize.push({ size: value, quantity: 1 });
     }
+  } else if (sizeIndex !== -1 && updatedSize[sizeIndex].quantity > 1) {
+    updatedSize[sizeIndex].quantity -= 1;
   } else {
-    if (sizeIndex !== -1) {
-      const updatedSize = [...formData.size];
-      if (updatedSize[sizeIndex].quantity > 1) {
-        updatedSize[sizeIndex] = {
-          size: value,
-          quantity: updatedSize[sizeIndex].quantity - 1,
-        };
-        setFormData({ ...formData, size: updatedSize });
-      } else {
-        setFormData({
-          ...formData,
-          size: formData.size.filter((sizeObj) => sizeObj.size !== value),
-        });
-      }
-    }
+    updatedSize.splice(sizeIndex, 1);
   }
+
+  setFormData({ ...formData, size: updatedSize });
 };
 
 export const handleQuantityChange = (e, size, formData, setFormData) => {
   const { value } = e.target;
   const parsedValue = parseInt(value, 10);
+
+  if (parseInt(value) < 1) {
+    return;
+  }
 
   const updatedSize = (formData.size || []).map((sizeObj) => {
     if (sizeObj.size === size) {

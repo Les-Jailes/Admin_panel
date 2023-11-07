@@ -1,11 +1,10 @@
 import React from "react";
-import style from "@/css/AddProducts/page.module.css";
-//import "@/css/AddProducts/page.module.css"
+import "@/css/AddProducts/InputContainer.css";
 
 export default function CheckboxWithQuantity({ size, checked, onChange, quantity, onQuantityChange, }) {
   return (
-    <div className={style.inputContainerQuantity}>
-      <label className={style.label}>
+    <div className="inputContainerQuantity">
+      <label className="label">
         {size}
       </label>
       <input
@@ -13,7 +12,7 @@ export default function CheckboxWithQuantity({ size, checked, onChange, quantity
           name="size"
           value={size}
           onChange={onChange}
-          className={style.checkbox}
+          className="checkbox"
           checked={checked}
         />
         {checked && (
@@ -22,7 +21,7 @@ export default function CheckboxWithQuantity({ size, checked, onChange, quantity
           name={`quantity_${size}`}
           value={quantity}
           onChange={(e) => onQuantityChange(e, size)}
-          className={style.quantityNumber}
+          className="quantityNumber"
         />
       )}
       <br />

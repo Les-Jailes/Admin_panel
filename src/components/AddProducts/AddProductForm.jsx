@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import API from "@/components/Api/api";
-import style from "@/css/AddProducts/page.module.css";
 import InputField from "./ProductComponents/InputField";
 import TextAreaField from "./ProductComponents/TextAreaField";
 import SelectField from "./ProductComponents/SelectField";
@@ -8,7 +7,8 @@ import CheckboxWithQuantity from "./ProductComponents/CheckboxWithQuantity";
 import ImageButton from "./ProductComponents/ImageButton";
 import DeleteButton from "./ProductComponents/DeleteButton";
 import { AiOutlinePlus } from "react-icons/ai";
-import "@/css/AddProducts/AddProductForm.css"
+import "@/css/AddProducts/FormContainer.css";
+import "@/css/AddProducts/InputContainer.css";
 
 import { handleDescriptionChange, handleInputChange, handleCategoriaChange,
   handleSizeChange, handleQuantityChange, handleImageChange,
@@ -17,7 +17,6 @@ import { handleDescriptionChange, handleInputChange, handleCategoriaChange,
 
 import getDefaultSize from "@/utils/Form/sizeClothes";
 import getDefaultTypes from "@/utils/Form/typesClothes";
-import getDefaultType from "@/utils/Form/typeClothes";
 import useHandleEffect from "./FormDataOperations/useEffect";
 
 export default function AddProductForm() {
@@ -38,7 +37,7 @@ export default function AddProductForm() {
 
   const submit = async (event) => {
     event.preventDefault();
-    const producForm = {
+    const productForm = {
       code: formData.code,
       name: formData.name,
       price: formData.price,
@@ -50,18 +49,18 @@ export default function AddProductForm() {
       description: formData.description,
     };
     try {
-      const response = await API.post("/product", producForm);
+      const response = await API.post("/product", productForm);
       console.log(response.status, response.data.token);
     } catch (error) {
       console.error("Axios Error:", error);
     }
   };
-  
+
   useHandleEffect(formData, setSizes);
 
   return (
     <div className="pageContainer">
-      <form className={style.form}>
+      <form className="form">
         <h1>Add Product</h1>
         <InputField
           label="Code"
@@ -94,7 +93,9 @@ export default function AddProductForm() {
           label="Categoria"
           name="categoria"
           value={formData.category}
-          onChange={(e) => handleCategoriaChange(e, formData, setFormData, getDefaultType, getDefaultSize)}
+          onChange={(e) =>
+            handleCategoriaChange(e, formData, setFormData, getDefaultSize)
+          }
           options={["Select a category", "Women", "Men", "Boy", "Girl"]}
         />
         <SelectField
@@ -122,11 +123,13 @@ export default function AddProductForm() {
                 formData.size.find((sizeObj) => sizeObj.size === size)
                   ?.quantity || ""
               }
-              onQuantityChange={(e) => handleQuantityChange(e, size, formData, setFormData)}
+              onQuantityChange={(e) =>
+                handleQuantityChange(e, size, formData, setFormData)
+              }
             />
           ))}
         <div className="inputImage">
-          <label className={style.label}>Image(s)</label>
+          <label className="label">Image(s)</label>
           <div className="image-path-container">
             <div className="image-button-container">
               {formData.images.map((image, index) => (
@@ -134,7 +137,9 @@ export default function AddProductForm() {
                   <ImageButton
                     index={index}
                     value={image}
-                    onChange={(index, value) => handleImageChange(index, value, formData, setFormData)}
+                    onChange={(index, value) =>
+                      handleImageChange(index, value, formData, setFormData)
+                    }
                   />
                 </div>
               ))}
@@ -142,11 +147,13 @@ export default function AddProductForm() {
             {formData.images.length > 0 && (
               <DeleteButton
                 index={formData.images.length - 1}
-                onClick={(index) => handleDeleteImage(index, formData, setFormData)}
+                onClick={(index) =>
+                  handleDeleteImage(index, formData, setFormData)
+                }
               />
             )}
             <button
-              className="plusButton"
+              className="image-path-container__plusButton"
               type="button"
               onClick={() => handleAddImage(formData, setFormData)}
             >
@@ -154,11 +161,7 @@ export default function AddProductForm() {
             </button>
           </div>
         </div>
-        <button
-          className={`${style.button} button`}
-          type="button"
-          onClick={submit}
-        >
+        <button className="form__button" type="button" onClick={submit}>
           Add
         </button>
       </form>
