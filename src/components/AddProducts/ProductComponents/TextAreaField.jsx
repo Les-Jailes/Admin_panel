@@ -10,7 +10,6 @@ export default function TextAreaField({ label, name, value, onChange, placeholde
         value={value}
         onChange={onChange}
         className="descriptionInput"
-        placeholder={placeholder}
       />
     </div>
   );
