@@ -1,11 +1,11 @@
 import React from "react";
-import style from "./page.module.css";
+import "@/css/AddProducts/InputContainer.css";
 
 export default function SelectField({ label, name, value, onChange, options, }) {
   return (
-    <div className={style.inputContainer}>
-      <label className={style.label}>{label}</label>
-      <select className={style.select} name={name} value={value} onChange={onChange}>
+    <div className="inputContainer">
+      <label className="label">{label}</label>
+      <select className="select" name={name} value={value} onChange={onChange}>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}
