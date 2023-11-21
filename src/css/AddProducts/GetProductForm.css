@@ -4,9 +4,9 @@
     box-sizing: border-box;
 }
 
-body {    
+body {
     min-height: 100vh;
-    background: linear-gradient(#003780, #391d3d);
+    background: rgba(243, 239, 239, 0.067);
 }
 
 .container {
@@ -14,8 +14,8 @@ body {
 }
 
 table {
-    color: #fff;
-    font-size: 14px;
+    color: #000;
+    font-size: 17px;
     table-layout: fixed;
     border-collapse: collapse;
 }
@@ -33,4 +33,324 @@ th {
 td {
     padding: 15px;
     border-bottom: solid 1px rgb(255, 255, 255, 0.2);
+}
+
+.delete-button {
+    font-size: 30px;
+    margin: 1px;
+}
+
+.edit-button {
+    font-size: 35px;
+    margin: 1px;
+}
+
+.delete-button:hover {
+    transition: 0.3;
+    font-size: 28px;
+    color: #000;
+}
+
+.edit-button:hover {
+    transition: 0.3;
+    font-size: 30px;
+    color: #000;
+}
+
+.delete-button:active {
+    transition: 0.3;
+    font-size: 28px;
+    color: #254b5e;
+}
+
+.edit-button:active {
+    transition: 0.3;
+    font-size: 30px;
+    color: #254b5e;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.add-button {
+    margin: 15px;
+    border: 10px;
+    background: rgba(243, 140, 210, 0.4);;
+    border-radius: 5px;
+    color: #000;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+    transition: .3s;
+    transform: translateX(-15px);
+}
+
+.add-button:active {
+    transform: scale(0.9);
+}
+
+@media screen and (max-width: 1566px) {
+
+    table {
+        max-width: 1500px; 
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1490px) {
+
+    table {
+        max-width: 1450px; 
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1430px) {
+
+    table {
+        max-width: 1400px; 
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1380px) {
+
+    table {
+        max-width: 1350px; 
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1315px) {
+
+    table {
+        max-width: 1270px; 
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1245px) {
+
+    table {
+        max-width: 1200px; 
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1190px) {
+
+    table {
+        max-width: 1150px; 
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1115px) {
+
+    table {
+        max-width: 1050px; 
+        width: 100%;
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+
+    table {
+        max-width: 900px; 
+        width: 100%;
+        font-size: 13px;
+    }
+
+    .add-button {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 870px) {
+
+    table {
+        max-width: 830px; 
+        width: 100%;
+        font-size: 11px;
+    }
+
+    .add-button {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 774px) {
+
+    table {
+        max-width: 730px; 
+        width: 100%;
+        font-size: 8px;
+    }
+
+    .add-button {
+        font-size: 8px;
+    }
+}
+
+@media screen and (max-width: 628px) {
+
+    table {
+        max-width: 600px; 
+        width: 100%;
+        font-size: 7px;
+    }
+
+}
+
+
+@media screen and (max-width: 1024px) {
+
+    table {
+        max-width: 1010px; 
+        width: 100%;
+        font-size: 12px;
+    }
+
+    .image {
+        transform: translateX(20px);
+    }
+
+    .delete-button {
+        transform: translateX(15px);
+        font-size: 20px;
+        margin: 1px;
+    }
+    
+    .edit-button {
+        transform: translateX(15px);
+        font-size: 25px;
+        margin: 1px;
+    }
+
+    .size {
+        transform: translateX(25px);
+    }
+
+    .color {
+        transform: translateX(25px);
+    }
+
+    .type {
+        transform: translateX(25px);
+    }
+
+    .category {
+        transform: translateX(25px);
+    }
+
+    .price {
+        transform: translateX(25px);
+    }
+
+    .code {
+        transform: translateX(25px);
+    }
+}
+
+@media screen and (max-width: 300px) {
+
+    table {
+        max-width: 285px; 
+        width: 90%;
+        font-size: 5px;
+    }
+
+    .image {
+        transform: translateX(-20px);
+    }
+
+    .delete-button {
+        transform: translateX(-5px);
+        font-size: 20px;
+        margin: 1px;
+    }
+    
+    .edit-button {
+        transform: translateX(-5px);
+        font-size: 25px;
+        margin: 1px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+
+    table {
+        max-width: 370px; 
+        width: 100%;
+        font-size: 6px;
+    }
+
+    .image {
+        transform: translateX(-20px);
+    }
+
+    .delete-button {
+        transform: translateX(-5px);
+        font-size: 20px;
+        margin: 1px;
+    }
+    
+    .edit-button {
+        transform: translateX(-5px);
+        font-size: 25px;
+        margin: 1px;
+    }
+}
+
+
+@media screen and (max-width: 390px) {
+
+    table {
+        max-width: 385px; 
+        width: 100%;
+        font-size: 6px;
+    }
+
+    .image {
+        transform: translateX(-20px);
+    }
+
+    .delete-button {
+        transform: translateX(-5px);
+        font-size: 20px;
+        margin: 1px;
+    }
+    
+    .edit-button {
+        transform: translateX(-5px);
+        font-size: 25px;
+        margin: 1px;
+    }
+}
+
+@media screen and (max-width: 430px) {
+
+    table {
+        max-width: 425px; 
+        width: 100%;
+        font-size: 6px;
+    }
+
+    .image {
+        transform: translateX(-20px);
+    }
+
+    .delete-button {
+        transform: translateX(-5px);
+        font-size: 20px;
+        margin: 1px;
+    }
+    
+    .edit-button {
+        transform: translateX(-5px);
+        font-size: 25px;
+        margin: 1px;
+    }
 }
