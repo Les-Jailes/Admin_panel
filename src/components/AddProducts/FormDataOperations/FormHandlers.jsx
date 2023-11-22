@@ -1,24 +1,43 @@
 import { useState } from "react";
 
 export const handleDescriptionChange = (e, setDescription) => {
-  setDescription(e.target.value);
+  const value = e.target.value;
+
+  if (value.length > 650) {
+    return;
+  }
+
+  setDescription(value);
 };
 
 export const handleInputChange = (e, formData, setFormData) => {
   const { name, value } = e.target;
 
-  if ((name === "code" || name === "price") && parseInt(value) < 1) {
+  if (name === "code" && (isNaN(value) || value.length > 4 || /^0+$/.test(value))) {
+    return;
+  }
+
+  if (name === "price" && (isNaN(value) || parseInt(value) < 1 || parseInt(value) > 10000)) {
+    return;
+  }
+
+
+  if (name === "tax" && (isNaN(value) || parseInt(value) < 1 || parseInt(value) > 90)) {
+    return;
+  }
+
+  if (name === "name" && value.length > 120) {
     return;
   }
 
   const updatedData =
-    name === "color" && value === "" ? 
-    { ...formData, [name]: "#ffffff" } : { ...formData, [name]: value };
+    name === "color" && value === "" ?
+      { ...formData, [name]: "#ffffff" } : { ...formData, [name]: value };
 
   setFormData(updatedData);
 };
 
-export const handleCategoriaChange = ( e, formData, setFormData, getDefaultSize ) => {
+export const handleCategoriaChange = (e, formData, setFormData, getDefaultSize) => {
   const categoria = e.target.value;
   setFormData({
     ...formData,
