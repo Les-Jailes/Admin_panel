@@ -22,6 +22,8 @@ const GetProductForm = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
+        setProducts((prevProducts) => prevProducts.filter(product => product._id !== id));
+
         API.delete(`/Product/${id}`)
         .then(
           console.log("")
