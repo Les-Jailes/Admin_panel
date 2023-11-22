@@ -40,13 +40,13 @@ export default function AddProductForm() {
     const productForm = {
       code: formData.code,
       name: formData.name,
+      description: formData.description,
       price: formData.price,
       category: formData.category,
       type: formData.type,
       color: formData.color,
       size: sizes,
       images: formData.images,
-      description: formData.description,
     };
     try {
       const response = await API.post("/product", productForm);
@@ -155,8 +155,7 @@ export default function AddProductForm() {
             <button
               className="image-path-container__plusButton"
               type="button"
-              onClick={() => handleAddImage(formData, setFormData)}
-            >
+              onClick={() => handleAddImage(formData, setFormData)}>
               <AiOutlinePlus size={18} />
             </button>
           </div>

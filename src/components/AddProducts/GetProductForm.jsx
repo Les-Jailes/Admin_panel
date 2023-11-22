@@ -25,12 +25,12 @@ const GetProductForm = () => {
         setProducts((prevProducts) => prevProducts.filter(product => product._id !== id));
 
         API.delete(`/Product/${id}`)
-        .then(
-          console.log("")
-        ).catch(error => console.log(error)) 
+          .then(
+            console.log("")
+          ).catch(error => console.log(error))
       }
     })
-  
+
   }
 
   useEffect(() => {
@@ -49,9 +49,11 @@ const GetProductForm = () => {
   return (
     <div className='container'>
       <div>
-        <button className='add-button'>
-          Add Product
-        </button>
+        <Link href={"/components/AddProducts/AddProductForm"} className="actionButton">
+          <button className='add-button'>
+            Add Product
+          </button>
+        </Link>
       </div>
       <div className='table-container'>
         <table>
@@ -93,10 +95,10 @@ const GetProductForm = () => {
                 </td>
 
                 <td>
-                  <Link href={"/"} className="actionButton" onClick={()=>handleDelete(product._id, product.name)}>
-                    <IoMdCloseCircleOutline className='delete-button' /> 
+                  <Link href={"/"} className="actionButton" onClick={() => handleDelete(product._id, product.name)}>
+                    <IoMdCloseCircleOutline className='delete-button' />
                   </Link>
-                  <Link href={"/"} className = "actionButton">
+                  <Link href={"/"} className="actionButton">
                     <TbEditCircle className='edit-button' />
                   </Link>
                 </td>
