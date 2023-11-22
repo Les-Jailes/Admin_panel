@@ -4,10 +4,6 @@
     box-sizing: border-box;
 }
 
-body {
-    min-height: 100vh;
-    background: rgba(243, 239, 239, 0.067);
-}
 
 .container {
     border: solid 2px (255, 255, 255, 0.3);
@@ -274,4 +270,8 @@ td {
     td:nth-of-type(9):before {
         content: "Action";
     }
+}
+
+.actionButton{
+    background:transparent;
 }

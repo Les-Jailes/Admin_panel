@@ -3,15 +3,38 @@ import API from '@/components/Api/api';
 import "@/css/AddProducts/GetProductForm.css";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { TbEditCircle } from "react-icons/tb";
+import Link from 'next/link'
+import Swal from 'sweetalert2';
+
+
 
 const GetProductForm = () => {
   const [products, setProducts] = useState([]);
+
+  const handleDelete = async (id, name) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `Do you want to delete ${name}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        API.delete(`/Product/${id}`)
+        .then(
+          console.log("")
+        ).catch(error => console.log(error)) 
+      }
+    })
+  
+  }
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await API.get("/Product");
-        console.log("Response:", response.data);
         setProducts(response.data);
       } catch (error) {
         console.error("Axios Error:", error);
@@ -68,8 +91,12 @@ const GetProductForm = () => {
                 </td>
 
                 <td>
-                  <IoMdCloseCircleOutline className='delete-button' />
-                  <TbEditCircle className='edit-button' />
+                  <Link href={"/"} className="actionButton" onClick={()=>handleDelete(product._id, product.name)}>
+                    <IoMdCloseCircleOutline className='delete-button' /> 
+                  </Link>
+                  <Link href={"/"} className = "actionButton">
+                    <TbEditCircle className='edit-button' />
+                  </Link>
                 </td>
               </tr>
             ))}
