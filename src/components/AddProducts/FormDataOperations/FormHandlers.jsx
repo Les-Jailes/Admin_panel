@@ -87,10 +87,15 @@ export const handleQuantityChange = (e, size, formData, setFormData) => {
 };
 
 export const handleImageChange = (index, value, formData, setFormData) => {
+  if (value && !value.startsWith("http://") && !value.startsWith("https://")) {
+    console.error("The URL of the image must begin with 'http://' or 'https://'");
+    return;
+  }
   const updatedImages = [...formData.images];
   updatedImages[index] = value;
   setFormData({ ...formData, images: updatedImages });
 };
+
 
 export const handleAddImage = (formData, setFormData) => {
   setFormData({ ...formData, images: [...formData.images, ""] });

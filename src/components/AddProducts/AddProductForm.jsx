@@ -38,30 +38,20 @@
     const [description, setDescription] = useState("");
 
     const submit = async (event) => {
-
-      if (
-        formData !== null && formData.code !== undefined ||
-        formData !== null && formData.name !== undefined ||
-        formData !== null && formData.description !== undefined ||
-        formData !== null && formData.price !== undefined ||
-        formData !== null && formData.category !== undefined ||
-        formData !== null && formData.type !== undefined ||
-        formData !== null && formData.color !== undefined ||
-        formData !== null && formData.size !== undefined ||
-        formData !== null && formData.tax !== undefined ||
-        formData !== null && formData.images !== undefined) {
+      
+      if (formData.code && formData.name && formData.price && formData.category && formData.type) {
         event.preventDefault();
         const productForm = {
           code: formData.code,
           name: formData.name,
-          description: formData.description,
+          description: description,
           price: formData.price,
           category: formData.category,
           type: formData.type,
           color: formData.color,
-          size: sizes,
+          size: formData.size, 
           tax: formData.tax,
-          images: formData.images,
+          path: formData.images,
         };
         try {
           const response = await API.post("/Product", productForm);
