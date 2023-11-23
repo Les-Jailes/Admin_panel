@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from 'react';
 import API from '@/components/Api/api';
 import "@/css/AddProducts/GetProductForm.css";
@@ -49,7 +50,7 @@ const GetProductForm = () => {
   return (
     <div className='container'>
       <div>
-        <Link href={/add/} className="actionButton">
+        <Link href={'/add'} className="actionButton">
           <button className='add-button'>
             Add Product
           </button>

@@ -71,12 +71,21 @@ export const handleQuantityChange = (e, size, formData, setFormData) => {
     return;
   }
 
-  const updatedSize = (formData.size || []).map((sizeObj) => {
-    if (sizeObj.size === size) {
-      return { ...sizeObj, quantity: isNaN(parsedValue) ? "" : parsedValue };
-    }
-    return sizeObj;
-  });
+  const updatedSize = [...formData.size];
+
+  const existingSizeIndex = formData.size.findIndex((sizeObj) => sizeObj.size === size);
+
+  if (existingSizeIndex !== -1) {
+    updatedSize[existingSizeIndex] = {
+      ...updatedSize[existingSizeIndex],
+      quantity: isNaN(parsedValue) ? "" : parsedValue,
+    };
+  } else {
+    updatedSize.push({
+      size: size,
+      quantity: isNaN(parsedValue) ? "" : parsedValue,
+    });
+  }
 
   setFormData({ ...formData, size: updatedSize });
 };

@@ -40,6 +40,7 @@
       
       if (formData.code && formData.name && formData.price && formData.category && formData.type) {
         event.preventDefault();
+        const filteredSize = formData.size.filter(item => typeof item === 'object');
         const productForm = {
           code: formData.code,
           name: formData.name,
@@ -48,12 +49,13 @@
           category: formData.category,
           type: formData.type,
           color: formData.color,
-          size: formData.size,          
+          sizes: filteredSize,          
           path: formData.images,
         };
         try {
+          console.log(productForm)
           const response = await API.post("/Product", productForm);
-          console.log(response.status, response.data.token);
+          console.log(response)
         } catch (error) {
           console.error("Axios Error:", error);
           console.log(error.response); 
