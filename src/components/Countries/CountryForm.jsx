@@ -135,7 +135,7 @@ const CountryForm = () => {
       const response = await axios.get(
         `https://restcountries.com/v3.1/name/${countryName}`
       );
-      const data = await response.json();
+      const data = await response.data;
       const isValidCountry = Array.isArray(data) && data.length > 0;
 
       if (isValidCountry) {
@@ -156,6 +156,7 @@ const CountryForm = () => {
         title: "Oops...",
         text: 'Country is not valid',
       });
+      return;
     }
 
     try {

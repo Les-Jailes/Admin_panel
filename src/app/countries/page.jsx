@@ -16,7 +16,7 @@ const Page = () => {
           response.data.map(async (country) => {
             try {
               const res = await axios.get(`https://restcountries.com/v3.1/name/${country.countryName}`);
-              const [data] = await res.json();
+              const [data] = await res.data;
               return {
                 ...country,
                 flagUrl: data.flags.png,
