@@ -1,7 +1,7 @@
 import React from "react";
 import CountryForm from "@/components/Countries/CountryForm";
 
-const page = () => {
+const Page = () => {
   return (
     <div>
       <CountryForm />
@@ -9,4 +9,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

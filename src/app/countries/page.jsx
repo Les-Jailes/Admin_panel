@@ -4,7 +4,7 @@ import AvailableCountries from "@/components/Countries/AvailableCountries";
 import API from "@/components/Api/api";
 import Swal from 'sweetalert2';
 
-const page = () => {
+const Page = () => {
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
@@ -18,13 +18,13 @@ const page = () => {
               const [data] = await res.json();
               return {
                 ...country,
-                flagUrl: data.flags.png, 
+                flagUrl: data.flags.png,
               };
             } catch (fetchError) {
               console.error(`Error fetching flag for ${country.countryName}:`, fetchError);
               return {
                 ...country,
-                flagUrl: "/path/to/default/flag/image.png", 
+                flagUrl: "/path/to/default/flag/image.png",
               };
             }
           })
@@ -43,28 +43,32 @@ const page = () => {
     const result = await Swal.fire({
       title: `Are you sure you want to delete ${cityName} from ${countryName}?`,
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
       try {
         await API.delete(`/Country/name/${countryName}/city/${cityName}`);
-        setCountries(countries.filter((country) => country.countryName !== countryName));
-        Swal.fire(
-          'Deleted!',
-          `${cityName} in ${countryName} has been deleted.`,
-          'success'
+        setCountries(
+          countries.filter((country) => country.countryName !== countryName)
         );
-      } catch (error) {
-        console.error('Error deleting country:', error);
         Swal.fire(
-          'Error!',
+          "Deleted!",
+          `${cityName} in ${countryName} has been deleted.`,
+          "success"
+        ).then(() => {
+          window.location.href = "/countries";
+        });
+      } catch (error) {
+        console.error("Error deleting country:", error);
+        Swal.fire(
+          "Error!",
           `There was an issue deleting ${cityName} in ${countryName}.`,
-          'error'
+          "error"
         );
       }
     }
@@ -77,4 +81,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

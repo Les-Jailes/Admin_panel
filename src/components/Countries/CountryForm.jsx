@@ -101,27 +101,7 @@ const CountryForm = () => {
     else if (!validateNumbersOnly(telephoneCode))
       errorMessage = errorMessage || "Telephone code can only contain numbers.";
 
-    for (const [index, subcity] of subcities.entries()) {
-      if (!subcity.name) {
-        errorMessage = `Subcity #${index + 1} name cannot be empty.`;
-        break;
-      } else if (!validateFirstLetterCapital(subcity.name)) {
-        errorMessage = `Subcity #${
-          index + 1
-        } name must start with a capital letter and can only contain letters and spaces.`;
-        break;
-      }
-
-      if (!subcity.zipCode) {
-        errorMessage = `Subcity #${index + 1} zip code cannot be empty.`;
-        break;
-      } else if (!validateNumbersOnly(subcity.zipCode)) {
-        errorMessage = `Subcity #${
-          index + 1
-        } zip code can only contain numbers.`;
-        break;
-      }
-    }
+    
 
     if (errorMessage) {
       Swal.fire({
@@ -143,6 +123,12 @@ const CountryForm = () => {
       })),
     };
 
+    if (countryData.zipCodes[0].subCityName === '' && countryData.zipCodes[0].zipCode === '') {
+      countryData.zipCodes.splice(0);
+    }
+
+    let countryValid = false;
+
     try {
       const response = await fetch(
         `https://restcountries.com/v3.1/name/${countryName}`
@@ -151,42 +137,52 @@ const CountryForm = () => {
       const isValidCountry = Array.isArray(data) && data.length > 0;
 
       if (isValidCountry) {
-        let apiResponse;
-        if (isEditing) {
-          const editCountry = JSON.parse(localStorage.getItem("editCountry"));
-          apiResponse = await API.put(
-            `/Country/${editCountry._id}`,
-            countryData
-          );
-        } else {
-          apiResponse = await API.post("/Country", countryData);
-        }
-
-        if (apiResponse.status === 200 || apiResponse.status === 201) {
-          Swal.fire(
-            "Success",
-            `Country ${isEditing ? "updated" : "created"} successfully!`,
-            "success"
-          );
-          resetForm();
-          localStorage.removeItem("editCountry");
-          if (isEditing) {
-            window.location.href = "/countries";
-          }
-        }
+        countryValid = true;
       } else {
         Swal.fire({
           icon: "error",
           title: "Oops...",
           text: "Country is not valid.",
         });
+        countryValid = false;
+        return;
+      }
+    } catch (error) {
+      countryValid = false;
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: 'Country is not valid',
+      });
+    }
+
+    try {
+      let apiResponse;
+      if (isEditing) {
+        const editCountry = JSON.parse(localStorage.getItem("editCountry"));
+        apiResponse = await API.put(`/Country/${editCountry._id}`, countryData);
+      } else {
+        apiResponse = await API.post("/Country", countryData);
+      }
+  
+      if (apiResponse.status === 200 || apiResponse.status === 201 && countryValid) {
+        Swal.fire(
+          "Success",
+          `Country ${isEditing ? "updated" : "created"} successfully!`,
+          "success"
+        );
+        resetForm();
+        localStorage.removeItem("editCountry");
+        if (isEditing) {
+          window.location.href = "/countries";
+        }
       }
     } catch (error) {
       console.error("There was an error:", error);
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "There was an error",
+        text: error.response.data.message || "There was an error",
       });
     }
   };
