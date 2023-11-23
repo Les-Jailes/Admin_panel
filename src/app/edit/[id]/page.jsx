@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import API from "@/components/Api/api";
 import EditProductForm from '@/components/AddProducts/EditProductForm';
-import '@/css/updateProducts/updateForm.css'
+
 
 const Page = ({ params }) => {
   const [productData, setProductData] = useState(null);
@@ -20,15 +20,6 @@ const Page = ({ params }) => {
   };
 
   useEffect(() => {
-    const isPageRefreshed = localStorage.getItem('isPageRefreshed');
-
-    if (!isPageRefreshed) {
-      
-      localStorage.setItem('isPageRefreshed', true);
-      location.reload();
-    } }
-  )
-  useEffect(() => {
     getProductData(params.id);
   }, [params.id]);
 
@@ -37,7 +28,7 @@ const Page = ({ params }) => {
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '110vh' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem'}}>
     <EditProductForm
       product={editedProduct}
       onChange={(updatedProduct) => setEditedProduct(updatedProduct)}

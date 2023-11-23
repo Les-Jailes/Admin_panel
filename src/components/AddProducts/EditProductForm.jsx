@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import API from "@/components/Api/api";
-import '@/css/updateProducts/updateForm.css'
 import Swal from 'sweetalert2';
-
+import '@/css/updateProducts/updateForm.css'
 
 
 const EditProductForm = ({ product }) => {
-  
   const [editedProduct, setEditedProduct] = useState({ ...product });
-
   const handleChange = (e, size) => {
     const { name, value } = e.target;
 
@@ -42,14 +39,13 @@ const EditProductForm = ({ product }) => {
     }
   };
 
-
   return (
-    <form className='form'>
-      <h1 className='title'>Edit Product Size Form</h1>
-      <label className='label'>
+    <form className='formEdit'>
+      <h1 className='titledit'>Edit Product Size Form</h1>
+      <label className='labelEdit'>
         Name of Product:
         <input
-          className='input'
+          className='inputEdit'
           type="text"
           name="name"
           value={editedProduct.name}
@@ -58,10 +54,10 @@ const EditProductForm = ({ product }) => {
         />
       </label>
 
-      <label className='label'>
+      <label className='labelEdit'>
         Price:
         <input
-          className='input'
+          className='inputEdit'
           type="text"
           name="price"
           value={editedProduct.price}
@@ -70,21 +66,21 @@ const EditProductForm = ({ product }) => {
         />
       </label>
 
-      <label className='label'>
+      <label className='labelEdit'>
         Description:
         <textarea
           name="description"
           value={editedProduct.description}
           onChange={handleChange}
           disabled
-          className='input'
+          className='inputEdit'
         />
       </label>
 
-      <label className='label'>
+      <label className='labelEdit'>
         Category:
         <input
-          className='input'
+          className='inputEdit'
           type="text"
           name="category"
           value={editedProduct.category}
@@ -93,10 +89,10 @@ const EditProductForm = ({ product }) => {
         />
       </label>
 
-      <label className='label'>
+      <label className='labelEdit'>
         Type:
         <input
-          className='input'
+          className='inputEdit'
           type="text"
           name="type"
           value={editedProduct.type}
@@ -105,10 +101,10 @@ const EditProductForm = ({ product }) => {
         />
       </label>
 
-      <label className='label'>
+      <label className='labelEdit'>
         Color:
         <input
-          className='input'
+          className='inputEdit'
           type="text"
           name="color"
           value={editedProduct.color[0]}
@@ -117,26 +113,26 @@ const EditProductForm = ({ product }) => {
         />
       </label>
 
-      <label className='label label-size-title'>
+      <label className='labelEdit labelEdit-size-title'>
         Sizes:
         {editedProduct.sizes.map((size) => (
           <div key={size._id} className='content-container'>
-            <label className='label label-size'>{size.size}:</label>
+            <label className='labelEdit labelEdit-size'>{size.size}:</label>
             <input
               name="quantity"
               type='number'
-              className='size-txt'
+              className='sizeEdit-txt'
               value={size.quantity}
               onChange={(e) => handleChange(e, size.size)}
+              min={0}
             />
           </div>
         ))}
       </label>
-
-      <label className='label img' >
+      <label className='imgEdit' >
         Image Paths (comma-separated):
         <input
-          className='input'
+          className='inputEdit'
           type="text"
           name="path"
           value={editedProduct.path.join(', ')}
@@ -144,8 +140,7 @@ const EditProductForm = ({ product }) => {
           disabled
         />
       </label>
-
-      <button type="button" onClick={handleSave} className='button'>
+      <button type="button" onClick={handleSave} className='buttonEdit'>
         Save Changes
       </button>
     </form>
