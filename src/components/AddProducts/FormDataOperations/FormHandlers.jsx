@@ -21,11 +21,6 @@ export const handleInputChange = (e, formData, setFormData) => {
     return;
   }
 
-
-  if (name === "tax" && (isNaN(value) || parseInt(value) < 1 || parseInt(value) > 90)) {
-    return;
-  }
-
   if (name === "name" && value.length > 120) {
     return;
   }

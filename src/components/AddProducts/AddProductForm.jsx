@@ -31,7 +31,6 @@
       type: "",
       color: "#ffffff",
       size: [],
-      tax: "",
       images: [""],
     });
 
@@ -49,8 +48,7 @@
           category: formData.category,
           type: formData.type,
           color: formData.color,
-          size: formData.size, 
-          tax: formData.tax,
+          size: formData.size,          
           path: formData.images,
         };
         try {
@@ -124,14 +122,6 @@
             name="color"
             className="input"
             value={formData.color}
-            onChange={(e) => handleInputChange(e, formData, setFormData)}
-          />
-          <InputField
-            label="Tax"
-            type="number"
-            name="tax"
-            className="input"
-            value={formData.tax}
             onChange={(e) => handleInputChange(e, formData, setFormData)}
           />
 
