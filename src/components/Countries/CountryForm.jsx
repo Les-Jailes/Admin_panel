@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "@/css/Countries/CountryForm.css";
 import Swal from "sweetalert2";
 import API from "../Api/api";
@@ -10,8 +10,8 @@ const CountryForm = () => {
   const [tax, setTax] = useState("");
   const [telephoneCode, setTelephoneCode] = useState("");
   const [subcities, setSubcities] = useState([{ name: "", zipCode: "" }]);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const validateLettersOnly = (input) => /^[A-Za-z]+$/.test(input);
   const validateFirstLetterCapital = (input) => /^[A-Z][a-zA-Z ]*$/.test(input);
   const validateNumbersOnly = (input) => /^[0-9]+$/.test(input);
   const validateInteger = (input) => /^[0-9]+$/.test(input);
@@ -22,13 +22,34 @@ const CountryForm = () => {
   const handleTaxChange = (e) => setTax(e.target.value);
   const handleTelephoneChange = (e) => setTelephoneCode(e.target.value);
 
+  useEffect(() => {
+    const editCountry = JSON.parse(localStorage.getItem("editCountry"));
+    if (editCountry) {
+      setCountryName(editCountry.countryName);
+      setCityName(editCountry.cityName);
+      setTax(editCountry.tax.toString());
+      const telephoneWithoutPlus = editCountry.telephoneCode.startsWith("+")
+        ? editCountry.telephoneCode.substring(1)
+        : editCountry.telephoneCode;
+      setTelephoneCode(telephoneWithoutPlus);
+      setSubcities(
+        editCountry.zipCodes.map((subcity) => ({
+          name: subcity.subCityName,
+          zipCode: subcity.zipCode,
+        }))
+      );
+      setIsEditing(true);
+    }
+  }, []);
+
   const addSubcity = () => {
     setSubcities([...subcities, { name: "", zipCode: "" }]);
   };
 
   const cancelButton = () => {
-    window.location.href = '/countries';
-  }
+    if (isEditing) localStorage.removeItem("editCountry");
+    window.location.href = "/countries";
+  };
 
   const handleSubcityChange = (index, key) => (e) => {
     const newSubcities = [...subcities];
@@ -49,7 +70,7 @@ const CountryForm = () => {
     setSubcities([{ name: "", zipCode: "" }]);
   };
 
-  const handleCreate = async (e) => {
+  const handleCreateOrUpdate = async (e) => {
     e.preventDefault();
 
     let errorMessage = "";
@@ -129,13 +150,29 @@ const CountryForm = () => {
       const data = await response.json();
       const isValidCountry = Array.isArray(data) && data.length > 0;
 
-      console.log(isValidCountry);
-
       if (isValidCountry) {
-        const response = await API.post("/Country", countryData);
-        if (response.status === 200) {
-          Swal.fire("Success", "Country created successfully!", "success");
+        let apiResponse;
+        if (isEditing) {
+          const editCountry = JSON.parse(localStorage.getItem("editCountry"));
+          apiResponse = await API.put(
+            `/Country/${editCountry._id}`,
+            countryData
+          );
+        } else {
+          apiResponse = await API.post("/Country", countryData);
+        }
+
+        if (apiResponse.status === 200 || apiResponse.status === 201) {
+          Swal.fire(
+            "Success",
+            `Country ${isEditing ? "updated" : "created"} successfully!`,
+            "success"
+          );
           resetForm();
+          localStorage.removeItem("editCountry");
+          if (isEditing) {
+            window.location.href = "/countries";
+          }
         }
       } else {
         Swal.fire({
@@ -145,19 +182,21 @@ const CountryForm = () => {
         });
       }
     } catch (error) {
-      console.error("There was an error validating the country:", error);
+      console.error("There was an error:", error);
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "There was an error validating the country.",
+        text: "There was an error",
       });
     }
   };
 
   return (
     <div className="form-container">
-      <div className="form-title">CREATE NEW COUNTRY</div>
-      <form className="form-body" onSubmit={handleCreate}>
+      <div className="form-title">
+        {isEditing ? `EDIT COUNTRY ${countryName}` : "CREATE NEW COUNTRY"}
+      </div>
+      <form className="form-body" onSubmit={handleCreateOrUpdate}>
         <div className="input-group">
           <label htmlFor="country-name">Country name</label>
           <input
@@ -220,9 +259,9 @@ const CountryForm = () => {
         </button>
         <div className="form-footer">
           <button type="submit" className="create-btn">
-            Create
+            {isEditing ? "Save" : "Create"}
           </button>
-          <button type="button" className="cancel-btn" onClick={cancelButton} >
+          <button type="button" className="cancel-btn" onClick={cancelButton}>
             Cancel
           </button>
         </div>
