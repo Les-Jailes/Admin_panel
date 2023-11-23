@@ -79,6 +79,20 @@
   cursor: pointer;
   width: 100%;
   margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 13px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.subcity-btn:hover {
+  transform: translateY(-3px); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.subcity-btn:active {
+  transform: translateY(1px); 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .form-footer {
@@ -96,7 +110,45 @@
   cursor: pointer;
   flex: 1;
   max-width: calc(50% - 5px);
+  font-weight: bold;
+  font-size: 15px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
+.create-btn:hover,
+.cancel-btn:hover {
+  transform: translateY(-3px); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.create-btn:active,
+.cancel-btn:active {
+  transform: translateY(1px); 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.remove-btn {
+    height: 40px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none; 
+    padding: 4px 14px; 
+    margin-left: 4px; 
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s; 
+  }
+  
+  .remove-btn:hover {
+    background-color: #ff1a1a; 
+  }
+  
+  .remove-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
 
 .create-btn {
   background-color: blue;

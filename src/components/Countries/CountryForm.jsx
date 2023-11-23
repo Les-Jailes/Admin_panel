@@ -8,8 +8,7 @@ const CountryForm = () => {
   const [cityName, setCityName] = useState("");
   const [tax, setTax] = useState("");
   const [telephoneCode, setTelephoneCode] = useState("");
-  const [subcityName, setSubcityName] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [subcities, setSubcities] = useState([{ name: '', zipCode: '' }]);
 
   const validateLettersOnly = (input) => /^[A-Za-z]+$/.test(input);
   const validateFirstLetterCapital = (input) => /^[A-Z][a-z]*$/.test(input);
@@ -21,8 +20,21 @@ const CountryForm = () => {
   const handleCityChange = (e) => setCityName(e.target.value);
   const handleTaxChange = (e) => setTax(e.target.value);
   const handleTelephoneChange = (e) => setTelephoneCode(e.target.value);
-  const handleSubcityChange = (e) => setSubcityName(e.target.value);
-  const handleZipChange = (e) => setZipCode(e.target.value);
+
+  const addSubcity = () => {
+    setSubcities([...subcities, { name: '', zipCode: '' }]);
+  };
+
+  const handleSubcityChange = (index, key) => (e) => {
+    const newSubcities = [...subcities];
+    newSubcities[index][key] = e.target.value;
+    setSubcities(newSubcities);
+  };
+
+  const removeSubcity = (index) => {
+    const newSubcities = subcities.filter((_, i) => i !== index);
+    setSubcities(newSubcities);
+  };
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -51,17 +63,26 @@ const CountryForm = () => {
     else if (!validateNumbersOnly(telephoneCode))
       errorMessage = errorMessage || "Telephone code can only contain numbers.";
 
-    if (!subcityName)
-      errorMessage = errorMessage || "Subcity name cannot be empty.";
-    else if (!validateLettersOnly(subcityName))
-      errorMessage = errorMessage || "Subcity name can only contain letters.";
-    else if (!validateFirstLetterCapital(subcityName))
-      errorMessage =
-        errorMessage || "Subcity name must start with a capital letter.";
-
-    if (!zipCode) errorMessage = errorMessage || "Zip code cannot be empty.";
-    else if (!validateNumbersOnly(zipCode))
-      errorMessage = errorMessage || "Zip code can only contain numbers.";
+      for (const [index, subcity] of subcities.entries()) {
+        if (!subcity.name) {
+          errorMessage = `Subcity #${index + 1} name cannot be empty.`;
+          break;
+        } else if (!validateLettersOnly(subcity.name)) {
+          errorMessage = `Subcity #${index + 1} name can only contain letters.`;
+          break;
+        } else if (!validateFirstLetterCapital(subcity.name)) {
+          errorMessage = `Subcity #${index + 1} name must start with a capital letter.`;
+          break;
+        }
+    
+        if (!subcity.zipCode) {
+          errorMessage = `Subcity #${index + 1} zip code cannot be empty.`;
+          break;
+        } else if (!validateNumbersOnly(subcity.zipCode)) {
+          errorMessage = `Subcity #${index + 1} zip code can only contain numbers.`;
+          break;
+        }
+      }
 
     if (errorMessage) {
       Swal.fire({
@@ -138,21 +159,28 @@ const CountryForm = () => {
           />
         </div>
         <div className="subcities-title">Subcities</div>
-        <div className="subcities">
+        {subcities.map((subcity, index) => (
+        <div key={index} className="subcities">
           <input
             type="text"
             placeholder="Name"
-            value={subcityName}
-            onChange={handleSubcityChange}
+            value={subcity.name}
+            onChange={handleSubcityChange(index, 'name')}
           />
           <input
             type="text"
             placeholder="Zip code"
-            value={zipCode}
-            onChange={handleZipChange}
+            value={subcity.zipCode}
+            onChange={handleSubcityChange(index, 'zipCode')}
           />
+          {subcities.length > 1 && (
+            <button type="button" onClick={() => removeSubcity(index)} className="remove-btn" >
+              Remove
+            </button>
+          )}
         </div>
-        <button className="subcity-btn">Add a new subcity</button>
+      ))}
+        <button type="button" className="subcity-btn" onClick={addSubcity}>Add a new subcity</button>
         <div className="form-footer">
           <button type="submit" className="create-btn">
             Create
