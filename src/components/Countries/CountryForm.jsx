@@ -26,6 +26,10 @@ const CountryForm = () => {
     setSubcities([...subcities, { name: "", zipCode: "" }]);
   };
 
+  const cancelButton = () => {
+    window.location.href = '/countries';
+  }
+
   const handleSubcityChange = (index, key) => (e) => {
     const newSubcities = [...subcities];
     newSubcities[index][key] = e.target.value;
@@ -218,7 +222,7 @@ const CountryForm = () => {
           <button type="submit" className="create-btn">
             Create
           </button>
-          <button type="button" className="cancel-btn">
+          <button type="button" className="cancel-btn" onClick={cancelButton} >
             Cancel
           </button>
         </div>
