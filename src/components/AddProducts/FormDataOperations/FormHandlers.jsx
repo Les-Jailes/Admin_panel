@@ -1,24 +1,38 @@
 import { useState } from "react";
 
 export const handleDescriptionChange = (e, setDescription) => {
-  setDescription(e.target.value);
+  const value = e.target.value;
+
+  if (value.length > 650) {
+    return;
+  }
+
+  setDescription(value);
 };
 
 export const handleInputChange = (e, formData, setFormData) => {
   const { name, value } = e.target;
 
-  if ((name === "code" || name === "price") && parseInt(value) < 1) {
+  if (name === "code" && (isNaN(value) || value.length > 4 || /^0+$/.test(value))) {
+    return;
+  }
+
+  if (name === "price" && (isNaN(value) || parseInt(value) < 1 || parseInt(value) > 10000)) {
+    return;
+  }
+
+  if (name === "name" && value.length > 120) {
     return;
   }
 
   const updatedData =
-    name === "color" && value === "" ? 
-    { ...formData, [name]: "#ffffff" } : { ...formData, [name]: value };
+    name === "color" && value === "" ?
+      { ...formData, [name]: "#ffffff" } : { ...formData, [name]: value };
 
   setFormData(updatedData);
 };
 
-export const handleCategoriaChange = ( e, formData, setFormData, getDefaultSize ) => {
+export const handleCategoriaChange = (e, formData, setFormData, getDefaultSize) => {
   const categoria = e.target.value;
   setFormData({
     ...formData,
@@ -57,21 +71,35 @@ export const handleQuantityChange = (e, size, formData, setFormData) => {
     return;
   }
 
-  const updatedSize = (formData.size || []).map((sizeObj) => {
-    if (sizeObj.size === size) {
-      return { ...sizeObj, quantity: isNaN(parsedValue) ? "" : parsedValue };
-    }
-    return sizeObj;
-  });
+  const updatedSize = [...formData.size];
+
+  const existingSizeIndex = formData.size.findIndex((sizeObj) => sizeObj.size === size);
+
+  if (existingSizeIndex !== -1) {
+    updatedSize[existingSizeIndex] = {
+      ...updatedSize[existingSizeIndex],
+      quantity: isNaN(parsedValue) ? "" : parsedValue,
+    };
+  } else {
+    updatedSize.push({
+      size: size,
+      quantity: isNaN(parsedValue) ? "" : parsedValue,
+    });
+  }
 
   setFormData({ ...formData, size: updatedSize });
 };
 
 export const handleImageChange = (index, value, formData, setFormData) => {
+  if (value && !value.startsWith("http://") && !value.startsWith("https://")) {
+    console.error("The URL of the image must begin with 'http://' or 'https://'");
+    return;
+  }
   const updatedImages = [...formData.images];
   updatedImages[index] = value;
   setFormData({ ...formData, images: updatedImages });
 };
+
 
 export const handleAddImage = (formData, setFormData) => {
   setFormData({ ...formData, images: [...formData.images, ""] });

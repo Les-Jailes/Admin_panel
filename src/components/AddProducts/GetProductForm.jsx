@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from 'react';
 import API from '@/components/Api/api';
 import "@/css/AddProducts/GetProductForm.css";
@@ -25,12 +26,12 @@ const GetProductForm = () => {
         setProducts((prevProducts) => prevProducts.filter(product => product._id !== id));
 
         API.delete(`/Product/${id}`)
-        .then(
-          console.log("")
-        ).catch(error => console.log(error)) 
+          .then(
+            console.log("")
+          ).catch(error => console.log(error))
       }
     })
-  
+
   }
 
   useEffect(() => {
@@ -49,9 +50,11 @@ const GetProductForm = () => {
   return (
     <div className='container'>
       <div>
-        <button className='add-button'>
-          Add Product
-        </button>
+        <Link href={'/add'} className="actionButton">
+          <button className='add-button'>
+            Add Product
+          </button>
+        </Link>
       </div>
       <div className='table-container'>
         <table>
