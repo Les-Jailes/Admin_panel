@@ -12,7 +12,6 @@ const AvailableCountries = ({ countries }) => {
         <div className="header-container">
           <h2>Available Countries</h2>
           <div className="header-buttons">
-            <button className="delete-country-btn">Delete country</button>
             <button type='button' className="add-country-btn" onClick={addNewProduct} >Add new country</button>
           </div>
         </div>
@@ -23,7 +22,7 @@ const AvailableCountries = ({ countries }) => {
                 <img src={country.flagUrl} alt={`${country.name} flag`} />
               </div>
               <div className="country-details">
-                <p className="country-name">{country.name} / {country.capital}</p>
+                <p className="country-name">{country.countryName} / {country.cityName}</p>
                 <div className="country-actions">
                   <button className="edit-btn">Edit</button>
                   <button className="delete-btn">Delete</button>

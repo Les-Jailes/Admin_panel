@@ -15,7 +15,7 @@
   gap: 10px;
 }
 
-.delete-country-btn,
+
 .add-country-btn {
   padding: 10px 20px;
   border: none;
@@ -29,25 +29,15 @@
   transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.delete-country-btn {
+.add-country-btn {
   background-color: white; 
   color: black; 
   border: 2px solid black; 
 }
 
-.add-country-btn {
-  background-color: black;
-}
-
-.delete-country-btn:hover {
+.add-country-btn:hover {
   background-color: black;
   color: white;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.add-country-btn:hover {
-  background-color: white;
-  color: black;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 

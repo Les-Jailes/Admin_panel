@@ -1,112 +1,46 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import AvailableCountries from "@/components/Countries/AvailableCountries";
+import API from "@/components/Api/api";
 
 const page = () => {
-    const mockCountries = [
-        {
-          name: 'Bolivia',
-          capital: 'La Paz',
-          flagUrl: 'https://via.placeholder.com/150/ff0000/FFFFFF?text=Bolivia',
-        },
-        {
-          name: 'Argentina',
-          capital: 'Buenos Aires',
-          flagUrl: 'https://via.placeholder.com/150/0000FF/FFFFFF?text=Argentina',
-        },
-        {
-          name: 'Canada',
-          capital: 'Ottawa',
-          flagUrl: 'https://via.placeholder.com/150/00FF00/FFFFFF?text=Canada',
-        },
-        {
-          name: 'Japan',
-          capital: 'Tokyo',
-          flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-        },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },{
-            name: 'Japan',
-            capital: 'Tokyo',
-            flagUrl: 'https://via.placeholder.com/150/F2F2F2/000000?text=Japan',
-          },
-      ];
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await API.get("/Country");
+        const countriesData = await Promise.all(
+          response.data.map(async (country) => {
+            try {
+              const res = await fetch(`https://restcountries.com/v3.1/name/${country.countryName}`);
+              const [data] = await res.json();
+              return {
+                ...country,
+                flagUrl: data.flags.png, 
+              };
+            } catch (fetchError) {
+              console.error(`Error fetching flag for ${country.countryName}:`, fetchError);
+              return {
+                ...country,
+                flagUrl: "/path/to/default/flag/image.png", 
+              };
+            }
+          })
+        );
+
+        setCountries(countriesData);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      }
+    };
+
+    fetchCountries();
+  }, []);
+
   return (
     <div>
-      <AvailableCountries countries={mockCountries} />
+      <AvailableCountries countries={countries} />
     </div>
   );
 };
