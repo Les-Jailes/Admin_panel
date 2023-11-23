@@ -4,7 +4,9 @@ import React from 'react'
 
 const page = () => {
   return (
-    <AddProductForm />
+    <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem'}}>
+        <AddProductForm />
+    </div>
   )
 }
 
