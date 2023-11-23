@@ -2,13 +2,14 @@
 import React, { useState } from "react";
 import "@/css/Countries/CountryForm.css";
 import Swal from "sweetalert2";
+import API from "../Api/api";
 
 const CountryForm = () => {
   const [countryName, setCountryName] = useState("");
   const [cityName, setCityName] = useState("");
   const [tax, setTax] = useState("");
   const [telephoneCode, setTelephoneCode] = useState("");
-  const [subcities, setSubcities] = useState([{ name: '', zipCode: '' }]);
+  const [subcities, setSubcities] = useState([{ name: "", zipCode: "" }]);
 
   const validateLettersOnly = (input) => /^[A-Za-z]+$/.test(input);
   const validateFirstLetterCapital = (input) => /^[A-Z][a-z]*$/.test(input);
@@ -22,7 +23,7 @@ const CountryForm = () => {
   const handleTelephoneChange = (e) => setTelephoneCode(e.target.value);
 
   const addSubcity = () => {
-    setSubcities([...subcities, { name: '', zipCode: '' }]);
+    setSubcities([...subcities, { name: "", zipCode: "" }]);
   };
 
   const handleSubcityChange = (index, key) => (e) => {
@@ -63,26 +64,30 @@ const CountryForm = () => {
     else if (!validateNumbersOnly(telephoneCode))
       errorMessage = errorMessage || "Telephone code can only contain numbers.";
 
-      for (const [index, subcity] of subcities.entries()) {
-        if (!subcity.name) {
-          errorMessage = `Subcity #${index + 1} name cannot be empty.`;
-          break;
-        } else if (!validateLettersOnly(subcity.name)) {
-          errorMessage = `Subcity #${index + 1} name can only contain letters.`;
-          break;
-        } else if (!validateFirstLetterCapital(subcity.name)) {
-          errorMessage = `Subcity #${index + 1} name must start with a capital letter.`;
-          break;
-        }
-    
-        if (!subcity.zipCode) {
-          errorMessage = `Subcity #${index + 1} zip code cannot be empty.`;
-          break;
-        } else if (!validateNumbersOnly(subcity.zipCode)) {
-          errorMessage = `Subcity #${index + 1} zip code can only contain numbers.`;
-          break;
-        }
+    for (const [index, subcity] of subcities.entries()) {
+      if (!subcity.name) {
+        errorMessage = `Subcity #${index + 1} name cannot be empty.`;
+        break;
+      } else if (!validateLettersOnly(subcity.name)) {
+        errorMessage = `Subcity #${index + 1} name can only contain letters.`;
+        break;
+      } else if (!validateFirstLetterCapital(subcity.name)) {
+        errorMessage = `Subcity #${
+          index + 1
+        } name must start with a capital letter.`;
+        break;
       }
+
+      if (!subcity.zipCode) {
+        errorMessage = `Subcity #${index + 1} zip code cannot be empty.`;
+        break;
+      } else if (!validateNumbersOnly(subcity.zipCode)) {
+        errorMessage = `Subcity #${
+          index + 1
+        } zip code can only contain numbers.`;
+        break;
+      }
+    }
 
     if (errorMessage) {
       Swal.fire({
@@ -93,6 +98,17 @@ const CountryForm = () => {
       return;
     }
 
+    const countryData = {
+      countryName,
+      cityName,
+      tax: parseInt(tax, 10), 
+      telephoneCode: `+${telephoneCode}`, 
+      zipCodes: subcities.map((subcity) => ({
+        subCityName: subcity.name,
+        zipCode: subcity.zipCode,
+      })),
+    };
+
     try {
       const response = await fetch(
         `https://restcountries.com/v3.1/name/${countryName}`
@@ -100,12 +116,13 @@ const CountryForm = () => {
       const data = await response.json();
       const isValidCountry = Array.isArray(data) && data.length > 0;
 
+      console.log(isValidCountry)
+
       if (isValidCountry) {
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Country created successfully!",
-        });
+        const response = await API.post("/Country", countryData);
+        if (response.status === 200) {
+          Swal.fire("Success", "Country created successfully!", "success");
+        }
       } else {
         Swal.fire({
           icon: "error",
@@ -160,27 +177,33 @@ const CountryForm = () => {
         </div>
         <div className="subcities-title">Subcities</div>
         {subcities.map((subcity, index) => (
-        <div key={index} className="subcities">
-          <input
-            type="text"
-            placeholder="Name"
-            value={subcity.name}
-            onChange={handleSubcityChange(index, 'name')}
-          />
-          <input
-            type="text"
-            placeholder="Zip code"
-            value={subcity.zipCode}
-            onChange={handleSubcityChange(index, 'zipCode')}
-          />
-          {subcities.length > 1 && (
-            <button type="button" onClick={() => removeSubcity(index)} className="remove-btn" >
-              Remove
-            </button>
-          )}
-        </div>
-      ))}
-        <button type="button" className="subcity-btn" onClick={addSubcity}>Add a new subcity</button>
+          <div key={index} className="subcities">
+            <input
+              type="text"
+              placeholder="Name"
+              value={subcity.name}
+              onChange={handleSubcityChange(index, "name")}
+            />
+            <input
+              type="text"
+              placeholder="Zip code"
+              value={subcity.zipCode}
+              onChange={handleSubcityChange(index, "zipCode")}
+            />
+            {subcities.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeSubcity(index)}
+                className="remove-btn"
+              >
+                Remove
+              </button>
+            )}
+          </div>
+        ))}
+        <button type="button" className="subcity-btn" onClick={addSubcity}>
+          Add a new subcity
+        </button>
         <div className="form-footer">
           <button type="submit" className="create-btn">
             Create
