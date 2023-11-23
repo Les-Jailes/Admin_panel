@@ -49,7 +49,7 @@ const GetProductForm = () => {
   return (
     <div className='container'>
       <div>
-        <Link href={"/components/AddProducts/AddProductForm"} className="actionButton">
+        <Link href={/add/} className="actionButton">
           <button className='add-button'>
             Add Product
           </button>
