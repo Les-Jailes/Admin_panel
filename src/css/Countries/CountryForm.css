@@ -1,0 +1,157 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  max-width: 740px;
+  margin: 50px auto;
+}
+
+.form-title {
+  font-size: 30px;
+  color: #000;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.input-group label {
+  min-width: 120px;
+  margin-right: 10px;
+}
+
+.form-body input {
+  width: 100%;
+  max-width: 740px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #000;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.subcities-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.form-body input:focus,
+.subcities input:focus {
+  outline: none;
+  border-bottom: 2px solid #555;
+}
+
+.subcities {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.subcities input {
+  flex-grow: 2;
+  width: calc(40% - 20px);
+  margin-right: 20px;
+  transition: border-color 0.2s;
+}
+
+.subcities input:last-child {
+  margin-right: 0;
+  margin-left: 20px;
+}
+
+.subcity-btn {
+  flex-grow: 1;
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.create-btn,
+.cancel-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  flex: 1;
+  max-width: calc(50% - 5px);
+}
+
+.create-btn {
+  background-color: blue;
+}
+
+.cancel-btn {
+  background-color: red;
+}
+
+@media (min-width: 740px) {
+  .form-container {
+    min-width: 740px;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .subcities input,
+  .subcity-btn {
+    flex: 1 1 100%;
+  }
+
+  .input-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .input-group label {
+    margin-bottom: 5px;
+  }
+
+  .subcities input {
+    width: 100%;
+  }
+
+  .form-footer {
+    flex-direction: row;
+  }
+
+  .form-body input,
+  .subcities input {
+    width: 100%;
+  }
+
+  .form-footer {
+    justify-content: space-between;
+  }
+
+  .create-btn,
+  .cancel-btn {
+    width: calc(40% - 5px);
+    margin-bottom: 0;
+  }
+}
