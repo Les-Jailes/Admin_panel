@@ -93,10 +93,10 @@ const GetProductForm = () => {
                 </td>
 
                 <td>
-                  <Link href={"/"} className="actionButton" onClick={()=>handleDelete(product._id, product.name)}>
+                  <Link href={"/"} className="actionButton" onClick={()=>handleDelete(product._id, product.name)} >
                     <IoMdCloseCircleOutline className='delete-button' /> 
                   </Link>
-                  <Link href={"/"} className = "actionButton">
+                  <Link href={`/edit/${product._id}`} className = "actionButton">
                     <TbEditCircle className='edit-button' />
                   </Link>
                 </td>
