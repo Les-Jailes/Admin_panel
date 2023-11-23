@@ -12,7 +12,7 @@ const CountryForm = () => {
   const [subcities, setSubcities] = useState([{ name: "", zipCode: "" }]);
 
   const validateLettersOnly = (input) => /^[A-Za-z]+$/.test(input);
-  const validateFirstLetterCapital = (input) => /^[A-Z][a-z]*$/.test(input);
+  const validateFirstLetterCapital = (input) => /^[A-Z][a-zA-Z ]*$/.test(input);
   const validateNumbersOnly = (input) => /^[0-9]+$/.test(input);
   const validateInteger = (input) => /^[0-9]+$/.test(input);
   const hasDecimal = (input) => input.includes(".") || input.includes(",");
@@ -37,20 +37,32 @@ const CountryForm = () => {
     setSubcities(newSubcities);
   };
 
+  const resetForm = () => {
+    setCountryName("");
+    setCityName("");
+    setTax("");
+    setTelephoneCode("");
+    setSubcities([{ name: "", zipCode: "" }]);
+  };
+
   const handleCreate = async (e) => {
     e.preventDefault();
 
     let errorMessage = "";
-    if (!countryName) errorMessage = "Country name cannot be empty.";
-    else if (!validateLettersOnly(countryName))
-      errorMessage = "Country name can only contain letters.";
-
-    if (!cityName) errorMessage = errorMessage || "City name cannot be empty.";
-    else if (!validateLettersOnly(cityName))
-      errorMessage = errorMessage || "City name can only contain letters.";
-    else if (!validateFirstLetterCapital(cityName))
+    if (!countryName) {
+      errorMessage = "Country name cannot be empty.";
+    } else if (!validateFirstLetterCapital(countryName)) {
       errorMessage =
-        errorMessage || "City name must start with a capital letter.";
+        "Country name must start with a capital letter and can only contain letters and spaces.";
+    }
+
+    if (!cityName) {
+      errorMessage = errorMessage || "City name cannot be empty.";
+    } else if (!validateFirstLetterCapital(cityName)) {
+      errorMessage =
+        errorMessage ||
+        "City name must start with a capital letter and can only contain letters and spaces.";
+    }
 
     if (!tax) errorMessage = errorMessage || "Tax cannot be empty.";
     else if (hasDecimal(tax))
@@ -68,13 +80,10 @@ const CountryForm = () => {
       if (!subcity.name) {
         errorMessage = `Subcity #${index + 1} name cannot be empty.`;
         break;
-      } else if (!validateLettersOnly(subcity.name)) {
-        errorMessage = `Subcity #${index + 1} name can only contain letters.`;
-        break;
       } else if (!validateFirstLetterCapital(subcity.name)) {
         errorMessage = `Subcity #${
           index + 1
-        } name must start with a capital letter.`;
+        } name must start with a capital letter and can only contain letters and spaces.`;
         break;
       }
 
@@ -101,8 +110,8 @@ const CountryForm = () => {
     const countryData = {
       countryName,
       cityName,
-      tax: parseInt(tax, 10), 
-      telephoneCode: `+${telephoneCode}`, 
+      tax: parseInt(tax, 10),
+      telephoneCode: `+${telephoneCode}`,
       zipCodes: subcities.map((subcity) => ({
         subCityName: subcity.name,
         zipCode: subcity.zipCode,
@@ -116,12 +125,13 @@ const CountryForm = () => {
       const data = await response.json();
       const isValidCountry = Array.isArray(data) && data.length > 0;
 
-      console.log(isValidCountry)
+      console.log(isValidCountry);
 
       if (isValidCountry) {
         const response = await API.post("/Country", countryData);
         if (response.status === 200) {
           Swal.fire("Success", "Country created successfully!", "success");
+          resetForm();
         }
       } else {
         Swal.fire({
