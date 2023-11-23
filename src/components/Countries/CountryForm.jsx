@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "@/css/Countries/CountryForm.css";
 import Swal from "sweetalert2";
 import API from "../Api/api";
+import axios from "axios";
 
 const CountryForm = () => {
   const [countryName, setCountryName] = useState("");
@@ -127,10 +128,11 @@ const CountryForm = () => {
       countryData.zipCodes.splice(0);
     }
 
+
     let countryValid = false;
 
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `https://restcountries.com/v3.1/name/${countryName}`
       );
       const data = await response.json();

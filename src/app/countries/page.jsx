@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import AvailableCountries from "@/components/Countries/AvailableCountries";
 import API from "@/components/Api/api";
 import Swal from 'sweetalert2';
+import axios from "axios";
 
 const Page = () => {
   const [countries, setCountries] = useState([]);
@@ -14,7 +15,7 @@ const Page = () => {
         const countriesData = await Promise.all(
           response.data.map(async (country) => {
             try {
-              const res = await fetch(`https://restcountries.com/v3.1/name/${country.countryName}`);
+              const res = await axios.get(`https://restcountries.com/v3.1/name/${country.countryName}`);
               const [data] = await res.json();
               return {
                 ...country,
