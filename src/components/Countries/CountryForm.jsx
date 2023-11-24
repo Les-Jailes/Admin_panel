@@ -6,13 +6,14 @@ import API from "../Api/api";
 import axios from "axios";
 
 const CountryForm = () => {
-  const MAX_SUBCITIES = 5;
+  const MAX_SUBCITIES = 25;
   const [countryName, setCountryName] = useState("");
   const [cityName, setCityName] = useState("");
   const [tax, setTax] = useState("");
   const [telephoneCode, setTelephoneCode] = useState("");
   const [subcities, setSubcities] = useState([{ name: "", zipCode: "" }]);
   const [isEditing, setIsEditing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateFirstLetterCapital = (input) => /^[A-Z][a-zA-Z ]*$/.test(input);
   const validateNumbersOnly = (input) => /^[0-9]+$/.test(input);
@@ -34,18 +35,20 @@ const CountryForm = () => {
         ? editCountry.telephoneCode.substring(1)
         : editCountry.telephoneCode;
       setTelephoneCode(telephoneWithoutPlus);
-      setSubcities(
-        editCountry.zipCodes.map((subcity) => ({
+      const loadedSubcities = editCountry.zipCodes && editCountry.zipCodes.length > 0
+      ? editCountry.zipCodes.map(subcity => ({
           name: subcity.subCityName,
-          zipCode: subcity.zipCode,
+          zipCode: subcity.zipCode
         }))
-      );
+      : [{ name: "", zipCode: "" }];
+
+    setSubcities(loadedSubcities);
       setIsEditing(true);
     }
   }, []);
 
   const addSubcity = () => {
-    if (subcities.length >= 15) {
+    if (subcities.length >= 25) {
       Swal.fire({
         icon: "error",
         title: "Limit reached",
@@ -133,12 +136,13 @@ const CountryForm = () => {
       })),
     };
 
-    if (countryData.zipCodes[0].subCityName === '' && countryData.zipCodes[0].zipCode === '') {
+    if (countryData.zipCodes[0].subCityName === '' && countryData.zipCodes[0].zipCode === '' || countryData.zipCodes.length === 0) {
       countryData.zipCodes.splice(0);
     }
 
 
     let countryValid = false;
+    setIsSubmitting(true);
 
     try {
       const response = await axios.get(
@@ -196,6 +200,8 @@ const CountryForm = () => {
         title: "Oops...",
         text: error.response.data.message || "There was an error",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -266,8 +272,8 @@ const CountryForm = () => {
           Add a new subcity
         </button>
         <div className="form-footer">
-          <button type="submit" className="create-btn">
-            {isEditing ? "Save" : "Create"}
+          <button type="submit" className="create-btn" disabled={isSubmitting} >
+            {isSubmitting ? 'Saving...' : (isEditing ? "Save" : "Create")}
           </button>
           <button type="button" className="cancel-btn" onClick={cancelButton}>
             Cancel
