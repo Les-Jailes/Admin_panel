@@ -6,6 +6,7 @@ import API from "../Api/api";
 import axios from "axios";
 
 const CountryForm = () => {
+  const MAX_SUBCITIES = 5;
   const [countryName, setCountryName] = useState("");
   const [cityName, setCityName] = useState("");
   const [tax, setTax] = useState("");
@@ -44,6 +45,14 @@ const CountryForm = () => {
   }, []);
 
   const addSubcity = () => {
+    if (subcities.length >= 15) {
+      Swal.fire({
+        icon: "error",
+        title: "Limit reached",
+        text: `You can only add up to ${MAX_SUBCITIES} subcities.`,
+      });
+      return;
+    }
     setSubcities([...subcities, { name: "", zipCode: "" }]);
   };
 
