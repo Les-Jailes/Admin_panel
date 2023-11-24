@@ -35,17 +35,33 @@ const CountryForm = () => {
         ? editCountry.telephoneCode.substring(1)
         : editCountry.telephoneCode;
       setTelephoneCode(telephoneWithoutPlus);
-      const loadedSubcities = editCountry.zipCodes && editCountry.zipCodes.length > 0
-      ? editCountry.zipCodes.map(subcity => ({
-          name: subcity.subCityName,
-          zipCode: subcity.zipCode
-        }))
-      : [{ name: "", zipCode: "" }];
+      const loadedSubcities =
+        editCountry.zipCodes && editCountry.zipCodes.length > 0
+          ? editCountry.zipCodes.map((subcity) => ({
+              name: subcity.subCityName,
+              zipCode: subcity.zipCode,
+            }))
+          : [{ name: "", zipCode: "" }];
 
-    setSubcities(loadedSubcities);
+      setSubcities(loadedSubcities);
       setIsEditing(true);
     }
-  }, []);
+
+    const handleBeforeUnload = (e) => {
+      if (isEditing) {
+        localStorage.removeItem("editCountry");
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+
+      if (isEditing) {
+        localStorage.removeItem("editCountry");
+      }
+    };
+  }, [isEditing]);
 
   const addSubcity = () => {
     if (subcities.length >= 25) {
@@ -114,8 +130,6 @@ const CountryForm = () => {
     else if (!validateNumbersOnly(telephoneCode))
       errorMessage = errorMessage || "Telephone code can only contain numbers.";
 
-    
-
     if (errorMessage) {
       Swal.fire({
         icon: "error",
@@ -136,10 +150,13 @@ const CountryForm = () => {
       })),
     };
 
-    if (countryData.zipCodes[0].subCityName === '' && countryData.zipCodes[0].zipCode === '' || countryData.zipCodes.length === 0) {
+    if (
+      (countryData.zipCodes[0].subCityName === "" &&
+        countryData.zipCodes[0].zipCode === "") ||
+      countryData.zipCodes.length === 0
+    ) {
       countryData.zipCodes.splice(0);
     }
-
 
     let countryValid = false;
     setIsSubmitting(true);
@@ -167,7 +184,7 @@ const CountryForm = () => {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: 'Country is not valid',
+        text: "Country is not valid",
       });
       return;
     }
@@ -180,7 +197,7 @@ const CountryForm = () => {
       } else {
         apiResponse = await API.post("/Country", countryData);
       }
-  
+
       if (apiResponse.status === 200 || apiResponse.status === 201 && countryValid) {
         Swal.fire(
           "Success",
@@ -272,8 +289,8 @@ const CountryForm = () => {
           Add a new subcity
         </button>
         <div className="form-footer">
-          <button type="submit" className="create-btn" disabled={isSubmitting} >
-            {isSubmitting ? 'Saving...' : (isEditing ? "Save" : "Create")}
+          <button type="submit" className="create-btn" disabled={isSubmitting}>
+            {isSubmitting ? "Saving..." : isEditing ? "Save" : "Create"}
           </button>
           <button type="button" className="cancel-btn" onClick={cancelButton}>
             Cancel
