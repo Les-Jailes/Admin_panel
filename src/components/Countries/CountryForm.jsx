@@ -6,12 +6,14 @@ import API from "../Api/api";
 import axios from "axios";
 
 const CountryForm = () => {
+  const MAX_SUBCITIES = 25;
   const [countryName, setCountryName] = useState("");
   const [cityName, setCityName] = useState("");
   const [tax, setTax] = useState("");
   const [telephoneCode, setTelephoneCode] = useState("");
   const [subcities, setSubcities] = useState([{ name: "", zipCode: "" }]);
   const [isEditing, setIsEditing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateFirstLetterCapital = (input) => /^[A-Z][a-zA-Z ]*$/.test(input);
   const validateNumbersOnly = (input) => /^[0-9]+$/.test(input);
@@ -33,17 +35,43 @@ const CountryForm = () => {
         ? editCountry.telephoneCode.substring(1)
         : editCountry.telephoneCode;
       setTelephoneCode(telephoneWithoutPlus);
-      setSubcities(
-        editCountry.zipCodes.map((subcity) => ({
-          name: subcity.subCityName,
-          zipCode: subcity.zipCode,
-        }))
-      );
+      const loadedSubcities =
+        editCountry.zipCodes && editCountry.zipCodes.length > 0
+          ? editCountry.zipCodes.map((subcity) => ({
+              name: subcity.subCityName,
+              zipCode: subcity.zipCode,
+            }))
+          : [{ name: "", zipCode: "" }];
+
+      setSubcities(loadedSubcities);
       setIsEditing(true);
     }
-  }, []);
+
+    const handleBeforeUnload = (e) => {
+      if (isEditing) {
+        localStorage.removeItem("editCountry");
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+
+      if (isEditing) {
+        localStorage.removeItem("editCountry");
+      }
+    };
+  }, [isEditing]);
 
   const addSubcity = () => {
+    if (subcities.length >= 25) {
+      Swal.fire({
+        icon: "error",
+        title: "Limit reached",
+        text: `You can only add up to ${MAX_SUBCITIES} subcities.`,
+      });
+      return;
+    }
     setSubcities([...subcities, { name: "", zipCode: "" }]);
   };
 
@@ -102,8 +130,6 @@ const CountryForm = () => {
     else if (!validateNumbersOnly(telephoneCode))
       errorMessage = errorMessage || "Telephone code can only contain numbers.";
 
-    
-
     if (errorMessage) {
       Swal.fire({
         icon: "error",
@@ -124,12 +150,16 @@ const CountryForm = () => {
       })),
     };
 
-    if (countryData.zipCodes[0].subCityName === '' && countryData.zipCodes[0].zipCode === '') {
+    if (
+      (countryData.zipCodes[0].subCityName === "" &&
+        countryData.zipCodes[0].zipCode === "") ||
+      countryData.zipCodes.length === 0
+    ) {
       countryData.zipCodes.splice(0);
     }
 
-
     let countryValid = false;
+    setIsSubmitting(true);
 
     try {
       const response = await axios.get(
@@ -154,7 +184,7 @@ const CountryForm = () => {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: 'Country is not valid',
+        text: "Country is not valid",
       });
       return;
     }
@@ -167,7 +197,7 @@ const CountryForm = () => {
       } else {
         apiResponse = await API.post("/Country", countryData);
       }
-  
+
       if (apiResponse.status === 200 || apiResponse.status === 201 && countryValid) {
         Swal.fire(
           "Success",
@@ -187,6 +217,8 @@ const CountryForm = () => {
         title: "Oops...",
         text: error.response.data.message || "There was an error",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -257,8 +289,8 @@ const CountryForm = () => {
           Add a new subcity
         </button>
         <div className="form-footer">
-          <button type="submit" className="create-btn">
-            {isEditing ? "Save" : "Create"}
+          <button type="submit" className="create-btn" disabled={isSubmitting}>
+            {isSubmitting ? "Saving..." : isEditing ? "Save" : "Create"}
           </button>
           <button type="button" className="cancel-btn" onClick={cancelButton}>
             Cancel
