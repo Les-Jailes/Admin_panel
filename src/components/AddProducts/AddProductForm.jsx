@@ -39,10 +39,9 @@ export default function AddProductForm() {
 
   const [description, setDescription] = useState("");
 
-  const submit = async (event) => {
+  const submit = async () => {
 
     if (formData.code && formData.name && formData.price && formData.category && formData.type) {
-      event.preventDefault();
       const filteredSize = formData.size.filter(item => typeof item === 'object');
       const productForm = {
         code: formData.code,
@@ -57,6 +56,13 @@ export default function AddProductForm() {
       };
       try {
         const response = await API.post("/Product", productForm);
+        console.log(response)
+        Swal.fire({
+          title: 'Success!',
+          text: `${formData.name} has been correctly been created.`,
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
       } catch (error) {
         console.error("Axios Error:", error);
       }
@@ -175,7 +181,7 @@ export default function AddProductForm() {
             </button>
           </div>
         </div>
-        <Link onClick={submit} href={"/"} className="form__button">
+        <Link  href={"/"} onClick={submit} className="form__button">
           Add Product
         </Link>
       </form>
