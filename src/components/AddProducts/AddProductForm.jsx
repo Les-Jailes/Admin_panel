@@ -12,16 +12,15 @@ import { AiOutlinePlus } from "react-icons/ai";
 import "@/css/AddProducts/FormContainer.css";
 import "@/css/AddProducts/InputContainer.css";
 import Swal from 'sweetalert2';
-
+import getDefaultSize from "@/utils/Form/sizeClothes";
+import getDefaultTypes from "@/utils/Form/typesClothes";
+import useHandleEffect from "./FormDataOperations/useEffect";
 import {
   handleDescriptionChange, handleInputChange, handleCategoriaChange,
   handleSizeChange, handleQuantityChange, handleImageChange,
   handleAddImage, handleDeleteImage,
 } from "@/components/AddProducts/FormDataOperations/FormHandlers";
 
-import getDefaultSize from "@/utils/Form/sizeClothes";
-import getDefaultTypes from "@/utils/Form/typesClothes";
-import useHandleEffect from "./FormDataOperations/useEffect";
 
 export default function AddProductForm() {
   const [sizes, setSizes] = useState([]);
@@ -132,7 +131,6 @@ export default function AddProductForm() {
           value={formData.color}
           onChange={(e) => handleInputChange(e, formData, setFormData)}
         />
-
         {formData.category &&
           getDefaultSize(formData.category).map((size) => (
             <CheckboxWithQuantity
