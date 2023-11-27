@@ -55,14 +55,8 @@
         };
         try {
           const response = await API.post("/Product", productForm);
-          Swal.fire({
-            title: 'Success!',
-            text: `${productForm.name} has been correctly created.`,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
         } catch (error) {
-          
+          console.error("Axios Error:", error);
         }
       }      
     };
