@@ -95,6 +95,12 @@ export const handleImageChange = (index, value, formData, setFormData) => {
     console.error("The URL of the image must begin with 'http://' or 'https://'");
     return;
   }
+
+  if (!/\.(png|jpg)$/i.test(value)) {
+    console.error("The image URL must end with '.png' or '.jpg'");
+    return;
+  }
+
   const updatedImages = [...formData.images];
   updatedImages[index] = value;
   setFormData({ ...formData, images: updatedImages });
