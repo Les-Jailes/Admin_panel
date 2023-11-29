@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import API from "@/components/Api/api";
 import Swal from 'sweetalert2';
 import '@/css/updateProducts/updateForm.css'
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 
 const EditProductForm = ({ product }) => {
@@ -140,9 +142,9 @@ const EditProductForm = ({ product }) => {
           disabled
         />
       </label>
-      <button type="button" onClick={handleSave} className='buttonEdit'>
+      <Link href={"/"} onClick={handleSave} className='buttonEdit'>
         Save Changes
-      </button>
+      </Link>
     </form>
   );
 };
