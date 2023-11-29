@@ -40,6 +40,22 @@ export default function AddProductForm() {
 
   const submit = async () => {
 
+    if (
+      !formData.code ||
+      !formData.name ||
+      !formData.price ||
+      !formData.category ||
+      !formData.type
+    ) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please fill in all required fields.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
     if (formData.code && formData.name && formData.price && formData.category && formData.type) {
       const filteredSize = formData.size.filter(item => typeof item === 'object');
       const productForm = {
