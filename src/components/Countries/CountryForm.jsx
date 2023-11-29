@@ -186,6 +186,7 @@ const CountryForm = () => {
         title: "Oops...",
         text: "Country is not valid",
       });
+      setIsSubmitting(false);
       return;
     }
 
@@ -203,12 +204,11 @@ const CountryForm = () => {
           "Success",
           `Country ${isEditing ? "updated" : "created"} successfully!`,
           "success"
-        );
-        resetForm();
-        localStorage.removeItem("editCountry");
-        if (isEditing) {
-          window.location.href = "/countries";
-        }
+        ).finally(() => {
+          resetForm();
+          localStorage.removeItem("editCountry");
+          window.location.href = '/countries';
+        });
       }
     } catch (error) {
       console.error("There was an error:", error);
