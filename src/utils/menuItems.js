@@ -11,12 +11,12 @@ export const menuItems = [
     url: '/',
     submenu: [
       {
-        title: 'Settings',
-        url: '/settings',
+        title: 'Admin panel',
+        url: '/',
       },
       {
-        title: 'Sing out',
-        url: '/sing-out',
+        title: 'Taxes',
+        url: '/countries',
       },
     ],
     icon:'bar'
