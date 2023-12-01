@@ -108,8 +108,13 @@ export const handleImageChange = (index, value, formData, setFormData) => {
 
 
 export const handleAddImage = (formData, setFormData) => {
+  if (formData.images.length >= 5) {
+    return;
+  }
+
   setFormData({ ...formData, images: [...formData.images, ""] });
 };
+
 
 export const handleDeleteImage = (index, formData, setFormData) => {
   if (index === 0 && formData.images.length >= 1) {
