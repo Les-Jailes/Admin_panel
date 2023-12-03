@@ -22,7 +22,7 @@ import {
 } from "@/components/AddProducts/FormDataOperations/FormHandlers";
 
 
-export default function AddProductForm() {
+export default function AddProductForm({ navigation }) {
   const [sizes, setSizes] = useState([]);
   const [formData, setFormData] = useState({
     code: "",
@@ -38,24 +38,61 @@ export default function AddProductForm() {
 
   const [description, setDescription] = useState("");
 
-  const submit = async () => {
+  const errorMessage = (code, name, description, price, category, size, image ,type) => {
+    let error = "";
+    if (code) {
+      error = error + "- <b>Code</b>, enter a number between 1 and 9999<br>";
+    }
+    if (name) {
+      error = error + "- <b>Name</b>, do not leave this field empty<br>";
+    }
+    if (description) {
+      error = error + "- <b>Description</b>, do not leave this field empty<br>";
+    }
+    if (price) {
+      error = error + "- <b>Price</b>, enter a value from 1 to 500<br>";
+    }
+    if (category) {
+      error = error + "- <b>Category</b>, select one category<br>";
+    }
+    if (size.length < 7) {
+      error = error + "- <b>Size</b>, select at least one size<br>";
+    }
+    if (image[0] === "") {
+      error = error + "- <b>Image</b>, enter at least one URL image<br>";
+    }
+    console.log(type)
+    if (type) {
+      error = error + "- <b>Type</b>, select any valid type <br>";
+    }
+    error = error.slice(0, -4); 
+  
+    return error;
+  };
 
-    if (
-      !formData.code ||
-      !formData.name ||
-      !formData.price ||
-      !formData.category ||
+  const submit = async () => {
+    const errorFields = errorMessage(
+      !formData.code,
+      !formData.name,
+      !description,
+      !formData.price,
+      !formData.category,
+      formData.size,
+      formData.images,
       !formData.type
-    ) {
+    );
+  
+    if (errorFields && errorFields.length > 1) {
+      console.log(formData)
+      const errorMessageText = `Please enter correct values in the following fields:<br><br> ${errorFields}`;
       Swal.fire({
         title: 'Error!',
-        text: 'Please fill in all required fields.',
+        html: errorMessageText,
         icon: 'error',
         confirmButtonText: 'OK',
       });
       return;
     }
-
     if (formData.code && formData.name && formData.price && formData.category && formData.type) {
       const filteredSize = formData.size.filter(item => typeof item === 'object');
       const productForm = {
@@ -78,6 +115,7 @@ export default function AddProductForm() {
           icon: 'success',
           confirmButtonText: 'OK',
         });
+        navigation("/")
       } catch (error) {
         console.error("Axios Error:", error);
       }
@@ -195,9 +233,9 @@ export default function AddProductForm() {
             </button>
           </div>
         </div>
-        <Link  href={"/"} onClick={submit} className="form__button">
+        <button type="button" onClick={submit} className="form__button">
           Add Product
-        </Link>
+        </button>
       </form>
     </div>
   );

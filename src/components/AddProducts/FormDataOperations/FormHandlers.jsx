@@ -17,7 +17,7 @@ export const handleInputChange = (e, formData, setFormData) => {
     return;
   }
 
-  if (name === "price" && (isNaN(value) || parseInt(value) < 1 || parseInt(value) > 10000)) {
+  if (name === "price" && (isNaN(value) || parseInt(value) < 1 || parseInt(value) > 500)) {
     return;
   }
 
