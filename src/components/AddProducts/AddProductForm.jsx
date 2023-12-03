@@ -43,12 +43,18 @@ export default function AddProductForm({ navigation }) {
     if (code) {
       error = error + "- <b>Code</b>, enter a number between 1 and 9999<br>";
     }
-    if (name) {
+    if (!name) {
       error = error + "- <b>Name</b>, do not leave this field empty<br>";
+    }else  if (/^\s+$/.test(name)) {
+        error = error + "- <b>Name</b>, cannot contain only spaces<br>";
     }
-    if (description) {
+    
+    if (!description) {
       error = error + "- <b>Description</b>, do not leave this field empty<br>";
+    }else if (/^\s+$/.test(description)) {
+        error = error + "- <b>Description</b>, cannot contain only spaces<br>";
     }
+    
     if (price) {
       error = error + "- <b>Price</b>, enter a value from 1 to 500<br>";
     }
@@ -73,8 +79,8 @@ export default function AddProductForm({ navigation }) {
   const submit = async () => {
     const errorFields = errorMessage(
       !formData.code,
-      !formData.name,
-      !description,
+      formData.name,
+      description,
       !formData.price,
       !formData.category,
       formData.size,

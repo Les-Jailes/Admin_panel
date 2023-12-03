@@ -13,7 +13,7 @@ export const handleDescriptionChange = (e, setDescription) => {
 export const handleInputChange = (e, formData, setFormData) => {
   const { name, value } = e.target;
 
-  if (name === "code" && (isNaN(value) || value.length > 4 || /^0+$/.test(value))) {
+  if (name === "code" && (isNaN(value) || /^0+$/.test(value)) | parseInt(value) < 1 || parseInt(value) > 9999) {
     return;
   }
 
