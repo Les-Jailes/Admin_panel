@@ -4,6 +4,7 @@ const getDefaultTypes = (categoria) => {
       case "Men":
       case "Boy":
         return [
+          "Select a type",
           "Shirts",
           "T-shirts",
           "Sweaters",
@@ -16,6 +17,7 @@ const getDefaultTypes = (categoria) => {
         ];
       case "Girl":
         return [
+          "Select a type",
           "T-shirts",
           "Sweaters",
           "Coats",
