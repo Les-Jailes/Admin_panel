@@ -11,23 +11,31 @@ import Swal from 'sweetalert2';
 
 const GetProductForm = () => {
   const [products, setProducts] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
-  const handleDelete = async (id, name) => {
+  const handleDelete = async (product, name) => {
     Swal.fire({
       title: 'Are you sure?',
-      text: `Do you want to delete ${name}?`,
+      text: `Do you want to empty the stock for ${name}?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Yes, empty stock!'
     }).then((result) => {
+      const sizes = product.sizes;
+      
       if (result.isConfirmed) {
-        setProducts((prevProducts) => prevProducts.filter(product => product._id !== id));
+        sizes.forEach((size) => {
+          size.quantity = 0;
+        });
+        const body = {
+          sizes
+        };
 
-        API.delete(`/Product/${id}`)
+        API.put(`/Product/${product._id}`, body)
           .then(
-            console.log("")
+            setRefresh(!refresh)
           ).catch(error => console.log(error))
       }
     })
@@ -45,7 +53,7 @@ const GetProductForm = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [[], refresh]);
 
   return (
     <div className='container'>
@@ -96,7 +104,7 @@ const GetProductForm = () => {
                 </td>
 
                 <td>
-                  <Link href={"/"} className="actionButton" onClick={()=>handleDelete(product._id, product.name)} >
+                  <Link href={"/"} className="actionButton" onClick={()=>handleDelete(product, product.name)} >
                     <IoMdCloseCircleOutline className='delete-button' /> 
                   </Link>
                   <Link href={`/edit/${product._id}`} className = "actionButton">
