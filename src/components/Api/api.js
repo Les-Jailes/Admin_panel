@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-    baseURL : "https://boutique-clothing-api.onrender.com",
+    baseURL : "https://api-rest-les-jailes.azurewebsites.net/",
 });
 
 export default API;
