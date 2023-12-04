@@ -130,7 +130,6 @@ export default function AddProductForm({ navigation }) {
       };
       try {
         const response = await API.post("/Product", productForm);
-        console.log(response)
         Swal.fire({
           title: 'Success!',
           text: `${formData.name} has been correctly been created.`,

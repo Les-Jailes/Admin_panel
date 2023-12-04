@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 
-const EditProductForm = ({ product }) => {
+const EditProductForm = ({ product, navigation }) => {
   const [editedProduct, setEditedProduct] = useState({ ...product });
   const handleChange = (e, size) => {
     const { name, value } = e.target;
@@ -25,19 +25,72 @@ const EditProductForm = ({ product }) => {
       }));
     }
   };
+  const errorMessage = (sizes) => {
+    let error = "";
+    if (sizes[0] && !sizes[0].quantity) {
+      error = error + `- <b>Size ${sizes[0].size}</b> can not be empty and has to be a valid number                    <br>`;
+    }else if (sizes[0] && sizes[0].quantity && parseInt(sizes[0].quantity) < 1){
+      error = error + `- <b>Size ${sizes[0].size}</b> must be greater than zero<br>`;
+    }
+
+    if (sizes[1] && !sizes[1].quantity) {
+      error = error + `- <b>Size ${sizes[1].size}</b> can not be empty and has to be a valid number                    <br>`;
+    }else if (sizes[1] && sizes[1].quantity && parseInt(sizes[1].quantity) < 1){
+      error = error + `- <b>Size ${sizes[1].size}</b> must be greater than zero<br>`;
+    }
+
+    if (sizes[2] && !sizes[2].quantity) {
+      error = error + `- <b>Size ${sizes[2].size}</b> can not be empty and has to be a valid number                    <br>`;
+    }else if (sizes[2] && sizes[2].quantity && parseInt(sizes[2].quantity) < 1){
+      error = error + `- <b>Size ${sizes[2].size}</b> must be greater than zero<br>`;
+    }
+
+    if (sizes[3] && !sizes[3].quantity) {
+      error = error + `- <b>Size ${sizes[3].size}</b> can not be empty and has to be a valid number                    <br>`;
+    }else if (sizes[3] && sizes[3].quantity && parseInt(sizes[3].quantity) < 1){
+      error = error + `- <b>Size ${sizes[3].size}</b> must be greater than zero<br>`;
+    }
+
+    if (sizes[4] && !sizes[4].quantity) {
+      error = error + `- <b>Size ${sizes[4].size}</b> can not be empty and has to be a valid number                    <br>`;
+    }else if (sizes[4] && sizes[4].quantity && parseInt(sizes[4].quantity) < 1){
+      error = error + `- <b>Size ${sizes[4].size}</b> must be greater than zero<br>`;
+    }
+
+    if (sizes[5] && !sizes[5].quantity) {
+      error = error + `- <b>Size ${sizes[5].size}</b> can not be empty and has to be a valid number                    <br>`;
+    }else if (sizes[5] && sizes[5].quantity && parseInt(sizes[5].quantity) < 1){
+      error = error + `- <b>Size ${sizes[5].size}</b> must be greater than zero<br>`;
+    }
+    return error
+  }
   const handleSave = async () => {
-    try {
-      const response = await API.put(`/Product/${editedProduct._id}`, editedProduct);
+    const errorSizes = errorMessage(editedProduct.sizes)
+    if(errorSizes &&  errorSizes.length >1){
+      console.log(editedProduct)
+      const errorMessageText = `${errorSizes}`;
       Swal.fire({
-        title: 'Success!',
-        text: `${editedProduct.name} has been correctly modified.`,
-        icon: 'success',
+        title: 'Error!',
+        html: errorMessageText,
+        icon: 'error',
         confirmButtonText: 'OK',
       });
-      if (response.status === 200) {
-        onSave(editedProduct);
+      return;
+    }else{
+      try {
+        const response = await API.put(`/Product/${editedProduct._id}`, editedProduct);
+        Swal.fire({
+          title: 'Success!',
+          text: `${editedProduct.name} has been correctly modified.`,
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+        navigation("/")
+        if (response.status === 200) {
+          onSave(editedProduct);
+        }
+      } catch (error) {
       }
-    } catch (error) {
     }
   };
 
@@ -142,9 +195,9 @@ const EditProductForm = ({ product }) => {
           disabled
         />
       </label>
-      <Link href={"/"} onClick={handleSave} className='buttonEdit'>
+      <button type= "button" onClick={handleSave} className='buttonEdit'>
         Save Changes
-      </Link>
+      </button>
     </form>
   );
 };
