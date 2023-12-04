@@ -61,13 +61,29 @@ export default function AddProductForm({ navigation }) {
     if (category) {
       error = error + "- <b>Category</b>, select one category<br>";
     }
+    console.log(size)
+    console.log(size[6])
+    
     if (size.length < 7) {
       error = error + "- <b>Size</b>, select at least one size<br>";
+    }else{
+      if(size[6] && size[6].quantity.length < 1){
+        error = error + "- <b>Size</b>, enter valid number in size amount     <br>";
+      }else if(size[7] &&size[7].quantity.length < 1){
+        error = error + "- <b>Size</b>, enter valid number in size amount     <br>";
+      }else if(size[8] && size[8].quantity.length < 1){
+        error = error + "- <b>Size</b>, enter valid number in size amount     <br>";
+      }else if(size[9] && size[9].quantity.length < 1){
+        error = error + "- <b>Size</b>, enter valid number in size amount     <br>";
+      }else if(size[10] && size[10].quantity.length < 1){
+        error = error + "- <b>Size</b>, enter valid number in size amount     <br>";
+      }else if(size[11] && size[11].quantity.length < 1){
+        error = error + "- <b>Size</b>, enter valid number in size amount     <br>";
+      }
     }
     if (image[0] === "") {
       error = error + "- <b>Image</b>, enter at least one URL image<br>";
     }
-    console.log(type)
     if (type) {
       error = error + "- <b>Type</b>, select any valid type <br>";
     }
@@ -114,7 +130,6 @@ export default function AddProductForm({ navigation }) {
       };
       try {
         const response = await API.post("/Product", productForm);
-        console.log(response)
         Swal.fire({
           title: 'Success!',
           text: `${formData.name} has been correctly been created.`,
